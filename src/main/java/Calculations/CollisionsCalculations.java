@@ -4,6 +4,7 @@ import GameObjects.Ball;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
+import static FX_Controllers.ControllerFXML_Base.controllerFXML_Base;
 
 public class CollisionsCalculations
 {
@@ -59,91 +60,108 @@ public class CollisionsCalculations
 		Ball_2.setVyActual(-Uy2);
 	}
 
-
 	public static void CalculateAngelAndPointOfCollision(Ball Ball_1, Ball Ball_2, Circle collisionPoint)
 	{
 		// *********************************************** //
-		// Obliczenia konta i punktu zderzenia siê pi³ek
-		// Do testow uzywane s¹ Ball_1, Ball_2.
+		// Calculating angle and position where ball collision
+		// used to safe and back position - avoid continues intersection
 		// *********************************************** //
 
 		// Obliczenia trygonometryczne
+		
+		double posX_Ball_1 = Ball_1.getPositionXActual();
+		double posX_Ball_2 = Ball_2.getPositionXActual();
+		double posY_Ball_1 = Ball_1.getPositionYActual();
+		double posY_Ball_2 = Ball_2.getPositionYActual();
+		double radius_Ball_1 = Ball_1.getShape().getRadius();
+		double radius_Ball_2 = Ball_2.getShape().getRadius();
 
 		double sumX = 0;
 		double sumY = 0;
 		double sumR = 0;
 		double sinAlfa = 0;
 		double cosAlfa = 0;
+		
+		double x1 = 0;
+		double x2 = 0;
+		double y1 = 0;
+		double y2 = 0;
+		double xColision = 0;
+		double yColision = 0;
 
-		sumX = Ball_1.getPositionXActual() - Ball_2.getPositionXActual();
 
-		if (Ball_1.getPositionXActual() > Ball_2.getPositionXActual())
+		//Checking position
+		
+		if (posX_Ball_1 > posX_Ball_2)
 		{
-			sumX = Ball_1.getPositionXActual() - Ball_2.getPositionXActual();
-		} else if (Ball_1.getPositionXActual() < Ball_2.getPositionXActual())
+			sumX = posX_Ball_1 - posX_Ball_2;
+		} else if (posX_Ball_1 < posX_Ball_2)
 		{
-			sumX = Ball_2.getPositionXActual() - Ball_1.getPositionXActual();
+			sumX = posX_Ball_2 - posX_Ball_1;
 		} else
 		{
 			sumX = 0;
 		}
 
-		sumY = Ball_1.getPositionXActual() - Ball_2.getPositionXActual();
-		if (Ball_1.getPositionXActual() > Ball_2.getPositionXActual())
+		if (posY_Ball_1 > posY_Ball_2)
 		{
-			sumY = Ball_1.getPositionXActual() - Ball_2.getPositionXActual();
-		} else if (Ball_1.getPositionXActual() < Ball_2.getPositionXActual())
+			sumY = posY_Ball_1 - posY_Ball_2;
+		} else if (posY_Ball_1 < posY_Ball_2)
 		{
-			sumY = Ball_2.getPositionXActual() - Ball_1.getPositionXActual();
+			sumY = posY_Ball_2 - posY_Ball_1;
 		} else
 		{
 			sumY = 0;
 		}
 
-		sumR = Ball_1.getShape().getRadius() + Ball_2.getShape().getRadius();
+		sumR = radius_Ball_1 + radius_Ball_2;
 
+		// Calculating trygonometry
+		
 		sinAlfa = sumY / sumR;
 		cosAlfa = sumX / sumR;
+	
+		x1 = radius_Ball_1 * cosAlfa;
+		x2 = radius_Ball_2 * cosAlfa;
 
-		double x1 = 0;
-		double x2 = 0;
-		double y1 = 0;
-		double y2 = 0;
+		y1 = radius_Ball_1 * sinAlfa;
+		y2 = radius_Ball_2 * sinAlfa;
 
-		x1 = Ball_1.getShape().getRadius() * cosAlfa;
-		x2 = Ball_2.getShape().getRadius() * cosAlfa;
-
-		y1 = Ball_1.getShape().getRadius() * sinAlfa;
-		y2 = Ball_2.getShape().getRadius() * sinAlfa;
-
-		if (Ball_1.getPositionXActual() > Ball_2.getPositionXActual())
+		
+		//Checking position
+		
+		if (posX_Ball_1 >= posX_Ball_2)
 		{
-			collisionPoint.setCenterX(Ball_2.getPositionXActual() + x2);
+			xColision = posX_Ball_2 + x2;
 
-		} else if (Ball_1.getPositionXActual() < Ball_2.getPositionXActual())
+		} else if (posX_Ball_1 < posX_Ball_2)
 		{
-			collisionPoint.setCenterX(Ball_2.getPositionXActual() - x2);
+			xColision = posX_Ball_2 - x2;
 
 		} else
 		{
-			collisionPoint.setCenterX(0);
+			xColision = 0;
 		}
 
-		if (Ball_1.getPositionXActual() > Ball_2.getPositionXActual())
+		if (posY_Ball_1 >= posY_Ball_2)
 		{
-			collisionPoint.setCenterY(Ball_2.getPositionXActual() + y2);
+			yColision = posY_Ball_2 + y2;
 
-		} else if (Ball_1.getPositionXActual() < Ball_2.getPositionXActual())
+		} else if (posY_Ball_1 < posY_Ball_2)
 		{
-			collisionPoint.setCenterY(Ball_2.getPositionXActual() - y2);
+			yColision = posY_Ball_2 - y2;
 
 		} else
 		{
-			collisionPoint.setCenterY(0);
+			yColision = 0;
 		}
 
+		// Safe position to ball
+		
+		collisionPoint.setCenterX(xColision);
+		collisionPoint.setCenterY(yColision);
 		collisionPoint.setRadius(3);
-	//	collisionPoint.setFill(Color.RED);
+		collisionPoint.setFill(Color.BLUE);
 	}
 
 }

@@ -138,8 +138,7 @@ public class CollisionBits
 						CollisionsCalculations.CalculateAngelAndPointOfCollision(referenceToBaseBall, referenceToCollisionBall, collisionPoint);
 						
 						collisionPoint.setFill(Color.GREEN);
-						// System.out.println(String.format("Collision poitn x:%d
-						// y:%d",(int)collisionPoint.getCenterX(),(int)collisionPoint.getCenterY()));
+						System.out.println(String.format("Collision poitn x:%d y:%d",(int)collisionPoint.getCenterX(),(int)collisionPoint.getCenterY()));
 					}
 					if (newValue == false && oldValue == true)
 					{

@@ -234,6 +234,15 @@ public class ControllerFXML_Base implements Initializable
 		ballController.setScreenSizeY((int) RIGHT_PANE.getPrefHeight());
 
 	}
+	
+	public int getScreenSizeX()
+	{
+		return (int)RIGHT_PANE.getPrefWidth();
+	}
+	public int getScreenSizeY()
+	{
+		return (int)RIGHT_PANE.getPrefHeight();
+	}
 
 	public void addObjectToPane(Node shape)
 	{
