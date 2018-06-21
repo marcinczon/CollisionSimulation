@@ -17,6 +17,7 @@ import javafx.scene.shape.Shape;
 
 public class Ball
 {
+	public static Ball ballBaseReference;
 	private static int ballNumbers;
 	private int ballNumber;
 
@@ -74,6 +75,7 @@ public class Ball
 
 	public Ball(ObservableList<Ball> BALL_OBS_LIST_REFERENCE)
 	{
+		ballBaseReference = this;
 		this.BALL_OBS_LIST_REFERENCE = BALL_OBS_LIST_REFERENCE;
 		Random random = new Random();
 		ball = new Circle();
@@ -187,19 +189,19 @@ public class Ball
 			{
 				for (Ball balls : BALL_OBS_LIST_REFERENCE)
 				{
-					if (balls.getBallNumbers() != getBallNumbers())
+					if (balls.getBallNumber() != getBallNumber())
 					{
 						Shape collisionShape = Shape.intersect((Shape) balls.getBall(), ball);
 						boolean intersects = collisionShape.getBoundsInLocal().isEmpty();
-						if (!intersects && !collisionBits.isOccupied(balls.getBallNumbers()))
+						if (!intersects && !collisionBits.isOccupied(balls.getBallNumber()))
 						{
-							CollisionsCalculations.CollisionTwoBall(balls, BALL_OBS_LIST_REFERENCE.get(getBallNumbers()));
-							collisionBits.setOccupied(balls.getBallNumbers());
+							CollisionsCalculations.CollisionTwoBall(balls, BALL_OBS_LIST_REFERENCE.get(getBallNumber()));
+							collisionBits.setOccupied(balls.getBallNumber());
 							balls.collisionBits.setOccupied(ballNumber);
 						}
-						if (intersects && collisionBits.isOccupied(balls.getBallNumbers()))
+						if (intersects && collisionBits.isOccupied(balls.getBallNumber()))
 						{
-							collisionBits.resetOccupied(balls.getBallNumbers());
+							collisionBits.resetOccupied(balls.getBallNumber());
 						}
 
 					}
@@ -315,6 +317,11 @@ public class Ball
 		return ball;
 	}
 
+	public Circle getShape()
+	{
+		return ball;
+	}
+
 	public ArrayList<Node> getNodes()
 	{
 		ArrayList<Node> getNodes = new ArrayList<Node>();
@@ -323,7 +330,7 @@ public class Ball
 		return getNodes;
 	}
 
-	public int getBallNumbers()
+	public int getBallNumber()
 	{
 		return ballNumber;
 	}
@@ -379,7 +386,7 @@ public class Ball
 	public void setReferenceBallList(ObservableList<Ball> BALL_OBS_LIST_REFERENCE)
 	{
 		this.BALL_OBS_LIST_REFERENCE = BALL_OBS_LIST_REFERENCE;
-		collisionBits = new CollisionBits(BALL_OBS_LIST_REFERENCE, ballNumber);
+		collisionBits = new CollisionBits(BALL_OBS_LIST_REFERENCE, ballBaseReference);
 
 	}
 
@@ -432,6 +439,24 @@ public class Ball
 		return collisionBits;
 	}
 
+	public double getPositionXActual()
+	{
+		return PositionXActual;
+	}
 
+	public void setPositionXActual(double positionXActual)
+	{
+		PositionXActual = positionXActual;
+	}
+
+	public double getPositionYActual()
+	{
+		return PositionYActual;
+	}
+
+	public void setPositionYActual(double positionYActual)
+	{
+		PositionYActual = positionYActual;
+	}
 
 }

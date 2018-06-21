@@ -2,6 +2,9 @@ package Status;
 
 import static FX_Controllers.ControllerFXML_CollisionTable2.controllerFXML_CollisionTable2;
 
+import java.util.ArrayList;
+
+import Calculations.CollisionsCalculations;
 import GameObjects.Ball;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -12,41 +15,45 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import static FX_Controllers.ControllerFXML_Base.controllerFXML_Base;
 
 public class CollisionBits
 {
+	private Ball referenceToBaseBall; // Reference to BASE Ball
+
 	static String style1 = "-fx-base: LIGHTGRAY";
 	static String style2 = "-fx-base: RED";
+	static String styleCollPoint1 = "";
+	static String styleCollPoint2 = "";
+
 	static String nameBall = "%d < c:%d t:%4d > %d";
 
 	private ObservableList<Ball> BALL_OBS_LIST_REFERENCE;
+
 	private ObservableList<statusBit> statusBitList = FXCollections.observableArrayList();;
+	// private ObservableList<collisionPoint> collisionPointList =
+	// FXCollections.observableArrayList();;
 
 	private int bitRange; // used to create new interior class
 	private int lockBall; // used to avoid compare the same ball in loop foreach
 
-	// IntegerProperty P_BallNumerProperty = new SimpleIntegerProperty();
-	//
-	// public IntegerProperty P_VyActualProperty()
-	// {
-	// return P_VyActualProperty;
-	// }
-
-	public CollisionBits(ObservableList<Ball> ballListReference, int lockBall)
+	public CollisionBits(ObservableList<Ball> ballListReference, Ball baseBall)
 	{
 		this.BALL_OBS_LIST_REFERENCE = ballListReference;
-		this.lockBall = lockBall;
+		this.lockBall = baseBall.getBallNumber();
+		this.referenceToBaseBall = baseBall;
 
 		bitRange = BALL_OBS_LIST_REFERENCE.size();
 
 		for (int i = 0; i < bitRange; i++)
 		{
 			if (i != lockBall)
-				statusBitList.add(new statusBit(i, false));
+				statusBitList.add(new statusBit(i, false, BALL_OBS_LIST_REFERENCE.get(i)));
 			else
-				statusBitList.add(new statusBit(i, true));
+				statusBitList.add(new statusBit(i, true, BALL_OBS_LIST_REFERENCE.get(i)));
 		}
-
 	}
 
 	public int getCounter(int ballNumber)
@@ -77,9 +84,9 @@ public class CollisionBits
 		for (int i = 0; i < bitRange; i++)
 		{
 			if (i != lockBall)
-				statusBitList.add(new statusBit(i, false));
+				statusBitList.add(new statusBit(i, false, BALL_OBS_LIST_REFERENCE.get(i)));
 			else
-				statusBitList.add(new statusBit(i, true));
+				statusBitList.add(new statusBit(i, true, BALL_OBS_LIST_REFERENCE.get(i)));
 		}
 		// System.out.println("Lock ball: " + lockBall + " status bit size: " +
 		// statusBitList.size());
@@ -95,6 +102,9 @@ public class CollisionBits
 	public class statusBit
 	{
 		private BooleanProperty booleanProperty = new SimpleBooleanProperty(true);
+		private Circle collisionPoint = new Circle();
+
+		private Ball referenceToCollisionBall;
 
 		private int counter = 0;
 		private boolean occupied;
@@ -104,14 +114,15 @@ public class CollisionBits
 		private long tStart = 0;
 		private long tEnd = 0;
 		private long tDelta = 0;
-		// double elapsedSeconds = tDelta / 1000.0;
 
-		public statusBit(int statusForBall, boolean statusLock)
+		public statusBit(int statusForBall, boolean statusLock, Ball referenceToCollisionBall)
 		{
+			this.referenceToCollisionBall = referenceToCollisionBall;
 			this.occupied = false;
 			this.booleanProperty.set(false);
 			this.statusLock = statusLock;
 			this.statusForBall = statusForBall;
+			controllerFXML_Base.addObjectToPane(collisionPoint);
 
 			booleanProperty.addListener(new ChangeListener<Boolean>()
 			{
@@ -124,6 +135,11 @@ public class CollisionBits
 					{
 						tStart = System.currentTimeMillis();
 						node.setStyle(style2);
+						CollisionsCalculations.CalculateAngelAndPointOfCollision(referenceToBaseBall, referenceToCollisionBall, collisionPoint);
+						
+						collisionPoint.setFill(Color.GREEN);
+						// System.out.println(String.format("Collision poitn x:%d
+						// y:%d",(int)collisionPoint.getCenterX(),(int)collisionPoint.getCenterY()));
 					}
 					if (newValue == false && oldValue == true)
 					{
@@ -132,9 +148,9 @@ public class CollisionBits
 						tDelta = tEnd - tStart;
 						tEnd = 0;
 						tStart = 0;
-						System.out.println(String.format("%d <-> %d Counter %d Time %d\n", lockBall, statusForBall, counter, tDelta));
+						//System.out.println(String.format("%d <-> %d Counter %d Time %d\n", lockBall, statusForBall, counter, tDelta));
+						collisionPoint.setFill(Color.RED);
 					}
-					
 
 					// Dokoncz mierzenie czasu jak trwa zderzenie
 				}

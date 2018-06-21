@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -24,7 +25,8 @@ import javafx.scene.layout.Pane;
 
 public class ControllerFXML_Base implements Initializable
 {
-
+	public static ControllerFXML_Base controllerFXML_Base;
+	
 	private BallController ballController = new BallController();
 	private ObservableList<Ball> BALL_OBS_LIST_REFERENCE;
 	private int ballSelected = 0;
@@ -79,7 +81,8 @@ public class ControllerFXML_Base implements Initializable
 	{
 
 	}
-	int counterTable=0;
+
+	int counterTable = 0;
 
 	private TableColumn<Ball, Integer> numberColumn = new TableColumn<Ball, Integer>("Number");
 	private TableColumn<Ball, Integer> PosXColumn = new TableColumn<Ball, Integer>("PosX");
@@ -90,6 +93,8 @@ public class ControllerFXML_Base implements Initializable
 	@SuppressWarnings("restriction")
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
+		controllerFXML_Base = this;
+		
 		BALL_OBS_LIST_REFERENCE = ballController.getBallList();
 
 		// Creating Table
@@ -132,7 +137,6 @@ public class ControllerFXML_Base implements Initializable
 				ControllerFXML_ThreadTable.threadList();
 				controllerFXML_CollisionTable2.generateColisionBitTable();
 
-				
 			}
 
 		});
@@ -221,7 +225,7 @@ public class ControllerFXML_Base implements Initializable
 			System.out.println(newSelection.toString());
 			newSelection.setRED();
 			oldSelection.setGray();
-			ballSelected = newSelection.getBallNumbers();
+			ballSelected = newSelection.getBallNumber();
 		});
 
 		// Set Screnn Size for Game
@@ -229,6 +233,11 @@ public class ControllerFXML_Base implements Initializable
 		ballController.setScreenSizeX((int) RIGHT_PANE.getPrefWidth());
 		ballController.setScreenSizeY((int) RIGHT_PANE.getPrefHeight());
 
+	}
+
+	public void addObjectToPane(Node shape)
+	{
+		RIGHT_PANE.getChildren().add(shape);
 	}
 
 }

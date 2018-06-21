@@ -60,7 +60,7 @@ public class ControllerFXML_CollisionTable2 implements Initializable
 			int size = ball.getCollisionBits().getStatusBitList().size();
 			for (int i = 0; i < size; i++)
 			{
-				addColumn(String.format(nameBall, ball.getBallNumbers(),0,0, i), ball.getBallNumbers(), i, ball.getCollisionBits().getStatusBitList().get(i).isStatusLock());
+				addColumn(String.format(nameBall, ball.getBallNumber(),0,0, i), ball.getBallNumber(), i, ball.getCollisionBits().getStatusBitList().get(i).isStatusLock());
 			}
 		}
 	}
