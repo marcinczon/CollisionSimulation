@@ -1,12 +1,13 @@
 package Status;
 
-import static FX_Controllers.ControllerFXML_CollisionTable2.controllerFXML_CollisionTable2;
+import static FX_Controllers.ControllerFXML_CollisionTable.controllerFXML_CollisionTable;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import Calculations.CollisionsCalculations;
 import GameObjects.Ball;
+import Parameters.GeneralString;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -24,25 +25,20 @@ import javafx.util.Duration;
 
 import static FX_Controllers.ControllerFXML_Base.controllerFXML_Base;
 
-public class CollisionBits
+public class CollisionBits implements GeneralString
 {
-	private Ball referenceToBaseBall; // Reference to BASE Ball
-
-	static String style1 = "-fx-base: LIGHTGRAY";
-	static String style2 = "-fx-base: RED";
-	static String styleCollPoint1 = "";
-	static String styleCollPoint2 = "";
-
-	static String nameBall = "%d < c:%d t:%4d > %d";
-
+	// Reference to BASE Ball
+	private Ball referenceToBaseBall; 
+	
+	private CollisionsCalculations collisionsCalculations = new CollisionsCalculations();
+	
 	private ObservableList<Ball> BALL_OBS_LIST_REFERENCE;
-
 	private ObservableList<statusBit> statusBitList = FXCollections.observableArrayList();;
-	// private ObservableList<collisionPoint> collisionPointList =
-	// FXCollections.observableArrayList();;
 
-	private int bitRange; // used to create new interior class
-	private int lockBall; // used to avoid compare the same ball in loop foreach
+	// used to create new interior class
+	private int bitRange; 
+	// used to avoid compare the same ball in loop foreach
+	private int lockBall; 
 
 	public CollisionBits(ObservableList<Ball> ballListReference, Ball baseBall)
 	{
@@ -93,8 +89,6 @@ public class CollisionBits
 			else
 				statusBitList.add(new statusBit(i, true, BALL_OBS_LIST_REFERENCE.get(i)));
 		}
-		// System.out.println("Lock ball: " + lockBall + " status bit size: " +
-		// statusBitList.size());
 	}
 
 	public int getSizeOfRange()
@@ -109,28 +103,29 @@ public class CollisionBits
 		private BooleanProperty booleanProperty = new SimpleBooleanProperty(true);
 		private Circle collisionPoint = new Circle();
 
-
 		private Ball referenceToCollisionBall;
-		Runnable runableCollisionBit;
-		Thread threadCollisionBit;
+		private Runnable runableCollisionBit;
+		private Thread threadCollisionBit;
 
 		private int counter = 0;
-		private boolean occupied;
-		private boolean statusLock;
-		private int statusForBall;
+		private int statusForBall = 0;
+		private boolean occupied = false;
+		private boolean statusLock = false;
 
 		private long tStart = 0;
 		private long tEnd = 0;
 		private long tDelta = 0;
 
 		public statusBit(int statusForBall, boolean statusLock, Ball referenceToCollisionBall)
-		{		
+		{
 			this.referenceToCollisionBall = referenceToCollisionBall;
 			this.occupied = false;
 			this.booleanProperty.set(false);
 			this.statusLock = statusLock;
 			this.statusForBall = statusForBall;
-			controllerFXML_Base.addObjectToPane(collisionPoint);
+	//		controllerFXML_Base.addObjectToPane(collisionPoint);
+			
+			controllerFXML_Base.getRIGHT_PANE().getChildren().add(collisionPoint);
 
 			booleanProperty.addListener(new ChangeListener<Boolean>()
 			{
@@ -138,26 +133,22 @@ public class CollisionBits
 				@Override
 				public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
 				{
-					Button node = (Button) getNodeFromGridPane(controllerFXML_CollisionTable2.mainGrid, lockBall, statusForBall);
+					Button node = (Button) getNodeFromGridPane(controllerFXML_CollisionTable.mainGrid, lockBall, statusForBall);
 					if (newValue == true && oldValue == false)
 					{
 						referenceToBaseBall.safeCollisionPosition();
 						tStart = System.currentTimeMillis();
-						node.setStyle(style2);
-						CollisionsCalculations.CalculateAngelAndPointOfCollision(referenceToBaseBall, referenceToCollisionBall, collisionPoint);
+						node.setStyle(styleButton2);
+						collisionsCalculations.CalculateAngelAndPointOfCollision(referenceToBaseBall, referenceToCollisionBall, collisionPoint);
 						collisionPoint.setFill(Color.GREEN);
-						// System.out.println(String.format("Collision poitn x:%d
-						// y:%d",(int)collisionPoint.getCenterX(),(int)collisionPoint.getCenterY()));
-						cyclickCheckingColision();
+						//cyclickCheckingColision();
 					}
 					if (newValue == false && oldValue == true)
 					{
 						referenceToBaseBall.resetCollisionPosition();
 						tEnd = System.currentTimeMillis();
-						node.setStyle(style1);
+						node.setStyle(styleButton1);
 						tDelta = tEnd - tStart;
-						tEnd = 0;
-						tStart = 0;
 						System.out.println(String.format("%d <-> %d Counter %d Time %d\n", lockBall, statusForBall, counter, tDelta));
 						collisionPoint.setFill(Color.RED);
 					}
@@ -166,6 +157,7 @@ public class CollisionBits
 
 		}
 		
+
 		private void cyclickCheckingColision()
 		{
 			runableCollisionBit = new Runnable()
@@ -182,7 +174,7 @@ public class CollisionBits
 								Thread.sleep(5);
 							} catch (InterruptedException e)
 							{
-								
+
 								e.printStackTrace();
 							}
 						}
@@ -192,7 +184,7 @@ public class CollisionBits
 
 			threadCollisionBit = new Thread(runableCollisionBit);
 			threadCollisionBit.start();
-			threadCollisionBit.setName("Ball "+lockBall+" Cyclick Checking Collision Bit with: " + statusForBall);
+			threadCollisionBit.setName("Ball " + lockBall + " Cyclick Checking Collision Bit with: " + statusForBall);
 		}
 
 		// Function to find Node in GridPane by column and rows (matrix X x Y)
@@ -248,6 +240,10 @@ public class CollisionBits
 		{
 			this.statusForBall = statusForBall;
 		}
+		public Node getNode()
+		{
+			return collisionPoint;
+		}
 
 	}
 
@@ -259,6 +255,16 @@ public class CollisionBits
 	public ObservableList<statusBit> getStatusBitList()
 	{
 		return statusBitList;
+	}
+	public ArrayList<Node> getNodes()
+	{
+		ArrayList<Node> nodes =  new ArrayList<>();
+		nodes.clear();
+		for (statusBit statusBit : statusBitList)
+		{
+			nodes.add(statusBit.getNode());
+		}
+		return nodes;
 	}
 
 }

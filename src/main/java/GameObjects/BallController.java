@@ -1,6 +1,7 @@
 package GameObjects;
 
-import static FX_Controllers.ControllerFXML_CollisionTable2.controllerFXML_CollisionTable2;
+import static FX_Controllers.ControllerFXML_CollisionTable.controllerFXML_CollisionTable;
+import static Parameters.GeneralParameters.generalParameters;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -8,14 +9,9 @@ import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import static GameObjects.GeneralParameters.generalParameters;
 public class BallController
 {
-
-
-
 	static ObservableList<Ball> BALL_OBS_LIST = FXCollections.observableArrayList();
-
 	
 	public BallController()
 	{
@@ -35,6 +31,10 @@ public class BallController
 			{
 
 				e.printStackTrace();
+			}
+			for (Ball ball : BALL_OBS_LIST)
+			{
+				ball.updateStatusBit();
 			}
 		}
 	}
@@ -58,7 +58,7 @@ public class BallController
 	public ArrayList<Node> getNodeFromBallList()
 	{
 		ArrayList<Node> nodeList = new ArrayList<Node>();
-
+		nodeList.clear();
 		for (Ball ball : BALL_OBS_LIST)
 		{
 			nodeList.addAll(ball.getNodes());

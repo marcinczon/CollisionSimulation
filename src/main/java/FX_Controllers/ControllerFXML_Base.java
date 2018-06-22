@@ -1,6 +1,6 @@
 package FX_Controllers;
 
-import static FX_Controllers.ControllerFXML_CollisionTable2.controllerFXML_CollisionTable2;
+import static FX_Controllers.ControllerFXML_CollisionTable.controllerFXML_CollisionTable;
 import static FX_Controllers.ControllerFXML_ThreadTable.controllerFXML_ThreadTable;
 
 import java.net.URL;
@@ -8,12 +8,14 @@ import java.util.ResourceBundle;
 
 import GameObjects.Ball;
 import GameObjects.BallController;
+import GameObjects.BallParameter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -24,8 +26,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
-import static GameObjects.ScreenParameter.screenParameter;
-import static GameObjects.GeneralParameters.generalParameters;
+import static Parameters.GeneralParameters.generalParameters;
+import static Parameters.ScreenParameter.screenParameter;
 
 public class ControllerFXML_Base implements Initializable
 {
@@ -33,6 +35,7 @@ public class ControllerFXML_Base implements Initializable
 
 	private BallController ballController = new BallController();
 	private ObservableList<Ball> BALL_OBS_LIST_REFERENCE;
+	private ObservableList<BallParameter> BALL_PARAMETER_OBS_LIST = FXCollections.observableArrayList();
 	private int ballSelected = 0;
 	private int increaseManualVelocity = 10;
 
@@ -78,7 +81,7 @@ public class ControllerFXML_Base implements Initializable
 	ChoiceBox choiceBoxMode;
 
 	@FXML
-	private TableView<Ball> NodeTable;
+	private TableView<BallParameter> NodeTable;
 
 	@FXML
 	public void buttonThreadClicked()
@@ -88,34 +91,40 @@ public class ControllerFXML_Base implements Initializable
 
 	int counterTable = 0;
 
-	private TableColumn<Ball, Integer> numberColumn = new TableColumn<Ball, Integer>("Number");
-	private TableColumn<Ball, Integer> PosXColumn = new TableColumn<Ball, Integer>("PosX");
-	private TableColumn<Ball, Integer> PosYColumn = new TableColumn<Ball, Integer>("PosY");
-	private TableColumn<Ball, Integer> VxColumn = new TableColumn<Ball, Integer>("Vx");
-	private TableColumn<Ball, Integer> VyColumn = new TableColumn<Ball, Integer>("Vy");
+	private TableColumn<BallParameter, Integer> numberColumn = new TableColumn<BallParameter, Integer>("Number");
+	private TableColumn<BallParameter, Integer> PosXColumn = new TableColumn<BallParameter, Integer>("PosX");
+	private TableColumn<BallParameter, Integer> PosYColumn = new TableColumn<BallParameter, Integer>("PosY");
+	private TableColumn<BallParameter, Integer> VxColumn = new TableColumn<BallParameter, Integer>("Vx");
+	private TableColumn<BallParameter, Integer> VyColumn = new TableColumn<BallParameter, Integer>("Vy");
+	private TableColumn<BallParameter, Integer> WeightColumn = new TableColumn<BallParameter, Integer>("Weight");
 
-	@SuppressWarnings("restriction")
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
 		controllerFXML_Base = this;
 
 		BALL_OBS_LIST_REFERENCE = ballController.getBallList();
+		for (Ball ball : BALL_OBS_LIST_REFERENCE)
+		{
+			BALL_PARAMETER_OBS_LIST.add(ball.getParameter());
+		}
 
 		// Creating Table
 
 		NodeTable.setStyle("-fx-font-size:12px;");
-		numberColumn.setCellValueFactory(new PropertyValueFactory<Ball, Integer>("P_BaseNumber"));
+		numberColumn.setCellValueFactory(new PropertyValueFactory<BallParameter, Integer>("P_BaseNumber"));
 		numberColumn.setPrefWidth(50);
-		PosXColumn.setCellValueFactory(new PropertyValueFactory<Ball, Integer>("P_PosX"));
+		PosXColumn.setCellValueFactory(new PropertyValueFactory<BallParameter, Integer>("P_PosX"));
 		PosXColumn.setPrefWidth(50);
-		PosYColumn.setCellValueFactory(new PropertyValueFactory<Ball, Integer>("P_PosY"));
+		PosYColumn.setCellValueFactory(new PropertyValueFactory<BallParameter, Integer>("P_PosY"));
 		PosYColumn.setPrefWidth(50);
-		VxColumn.setCellValueFactory(new PropertyValueFactory<Ball, Integer>("P_VxActual"));
+		VxColumn.setCellValueFactory(new PropertyValueFactory<BallParameter, Integer>("P_VxActual"));
 		VxColumn.setPrefWidth(50);
-		VyColumn.setCellValueFactory(new PropertyValueFactory<Ball, Integer>("P_VyActual"));
+		VyColumn.setCellValueFactory(new PropertyValueFactory<BallParameter, Integer>("P_VyActual"));
 		VyColumn.setPrefWidth(50);
-		NodeTable.getColumns().addAll(numberColumn, PosXColumn, PosYColumn, VxColumn, VyColumn);
-		NodeTable.setItems(BALL_OBS_LIST_REFERENCE);
+		WeightColumn.setCellValueFactory(new PropertyValueFactory<BallParameter, Integer>("P_Weight"));
+		WeightColumn.setPrefWidth(50);
+		NodeTable.getColumns().addAll(numberColumn, PosXColumn, PosYColumn, VxColumn, VyColumn,WeightColumn);
+		NodeTable.setItems(BALL_PARAMETER_OBS_LIST);
 
 		// Choice Box Parameters
 
@@ -134,12 +143,9 @@ public class ControllerFXML_Base implements Initializable
 
 				// Every time when added new balls, have to be updated interlock list-collisions
 				// bit class
-				for (Ball ball : BALL_OBS_LIST_REFERENCE)
-				{
-					ball.updateStatusBit();
-				}
+				updateTable();
 				ControllerFXML_ThreadTable.threadList();
-				controllerFXML_CollisionTable2.generateColisionBitTable();
+				controllerFXML_CollisionTable.generateColisionBitTable();
 
 			}
 
@@ -226,10 +232,10 @@ public class ControllerFXML_Base implements Initializable
 
 		NodeTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) ->
 		{
-			System.out.println(newSelection.toString());
-			newSelection.setRED();
-			oldSelection.setGray();
-			ballSelected = newSelection.getParameter().getBaseNumber();
+			// System.out.println(newSelection.toString());
+			// newSelection.setRED();
+			// oldSelection.setGray();
+			// ballSelected = newSelection.getParameter().getBaseNumber();
 		});
 
 		// Set Screnn Size for Game
@@ -251,7 +257,24 @@ public class ControllerFXML_Base implements Initializable
 
 	public void addObjectToPane(Node shape)
 	{
+		//shape.
 		RIGHT_PANE.getChildren().add(shape);
 	}
+
+	private void updateTable()
+	{
+		BALL_PARAMETER_OBS_LIST.clear();
+		for (Ball ball : BALL_OBS_LIST_REFERENCE)
+		{
+			BALL_PARAMETER_OBS_LIST.add(ball.getParameter());
+		}
+	}
+
+	public Pane getRIGHT_PANE()
+	{
+		return RIGHT_PANE;
+	}
+
+
 
 }

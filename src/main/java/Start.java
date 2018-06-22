@@ -1,8 +1,8 @@
 
 import FX_Controllers.ControllerFXML_Base;
-import FX_Controllers.ControllerFXML_CollisionTable2;
-import GameObjects.GeneralParameters;
-import GameObjects.ScreenParameter;
+import FX_Controllers.ControllerFXML_CollisionTable;
+import Parameters.GeneralParameters;
+import Parameters.ScreenParameter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,8 +19,6 @@ public class Start extends Application
 	// - Add paddle to play
 	
 	//Reference to class
-//	static ControllerFXML_Base controllerFXML_Base = new ControllerFXML_Base();
-
 	static GeneralParameters generalParameters =  new GeneralParameters();
 	static ScreenParameter screenParameter = new ScreenParameter();
 	
@@ -54,7 +52,7 @@ public class Start extends Application
 			Parent parent2 = FXMLLoader.load(getClass().getResource("FX_FXML/FXML_ThreadTable.fxml"));
 			Scene scene2 = new Scene(parent2);
 			
-			parent3 = FXMLLoader.load(getClass().getResource("FX_FXML/FXML_CollisionTable2.fxml"));
+			parent3 = FXMLLoader.load(getClass().getResource("FX_FXML/FXML_CollisionTable.fxml"));
 			Scene scene3 = new Scene(parent3);
 
 			primaryStage.setScene(scene1);

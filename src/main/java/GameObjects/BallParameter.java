@@ -41,7 +41,7 @@ public class BallParameter
 	IntegerProperty P_VyActualProperty = new SimpleIntegerProperty();
 	IntegerProperty P_WeightProperty = new SimpleIntegerProperty();
 
-	public IntegerProperty P_BallNumberProperty()
+	public IntegerProperty P_BaseNumberProperty()
 	{
 		return P_BaseNumerProperty;
 	}
