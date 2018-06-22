@@ -1,6 +1,7 @@
 package FX_Controllers;
 
 import static FX_Controllers.ControllerFXML_CollisionTable2.controllerFXML_CollisionTable2;
+import static FX_Controllers.ControllerFXML_ThreadTable.controllerFXML_ThreadTable;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,7 +27,7 @@ import javafx.scene.layout.Pane;
 public class ControllerFXML_Base implements Initializable
 {
 	public static ControllerFXML_Base controllerFXML_Base;
-	
+
 	private BallController ballController = new BallController();
 	private ObservableList<Ball> BALL_OBS_LIST_REFERENCE;
 	private int ballSelected = 0;
@@ -79,7 +80,7 @@ public class ControllerFXML_Base implements Initializable
 	@FXML
 	public void buttonThreadClicked()
 	{
-
+		controllerFXML_ThreadTable.threadList();
 	}
 
 	int counterTable = 0;
@@ -94,7 +95,7 @@ public class ControllerFXML_Base implements Initializable
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
 		controllerFXML_Base = this;
-		
+
 		BALL_OBS_LIST_REFERENCE = ballController.getBallList();
 
 		// Creating Table
@@ -234,14 +235,15 @@ public class ControllerFXML_Base implements Initializable
 		ballController.setScreenSizeY((int) RIGHT_PANE.getPrefHeight());
 
 	}
-	
+
 	public int getScreenSizeX()
 	{
-		return (int)RIGHT_PANE.getPrefWidth();
+		return (int) RIGHT_PANE.getPrefWidth();
 	}
+
 	public int getScreenSizeY()
 	{
-		return (int)RIGHT_PANE.getPrefHeight();
+		return (int) RIGHT_PANE.getPrefHeight();
 	}
 
 	public void addObjectToPane(Node shape)

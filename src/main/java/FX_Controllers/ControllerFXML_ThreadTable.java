@@ -17,6 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class ControllerFXML_ThreadTable implements Initializable
 {
 
+	public static ControllerFXML_ThreadTable controllerFXML_ThreadTable;
 	static ObservableList<ThreadInfo> THREAD_OBS_LIST = FXCollections.observableArrayList();
 
 	@FXML
@@ -30,6 +31,7 @@ public class ControllerFXML_ThreadTable implements Initializable
 	@Override
 	public void initialize(URL location, ResourceBundle resources)
 	{
+		controllerFXML_ThreadTable=this;
 		TableThreads.setStyle("-fx-font-size:12px;");
 		nameColumn.setCellValueFactory(new PropertyValueFactory<ThreadInfo, String>("Name"));
 		nameColumn.setPrefWidth(70);

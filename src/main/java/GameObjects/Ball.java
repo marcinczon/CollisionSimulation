@@ -66,6 +66,11 @@ public class Ball
 	private double Vy0 = 0;
 	private double Vy1 = 0;
 
+	// Variable to calculate collision position
+	private boolean lockPosition = false;
+	private double lastPositionX = 0;
+	private double lastPositionY = 0;
+
 	// Property to connect with table
 	IntegerProperty P_BallNumerProperty = new SimpleIntegerProperty();
 	IntegerProperty P_PosXProperty = new SimpleIntegerProperty();
@@ -109,6 +114,11 @@ public class Ball
 						{
 							calculationPhisicsX();
 							calculationPhisicsY();
+							if (!lockPosition)
+							{
+								lastPositionX = PositionXActual;
+								lastPositionY = PositionYActual;
+							}
 							updatePosition();
 							// calculationsCollision();
 
@@ -145,7 +155,6 @@ public class Ball
 				P_PosYProperty.set((int) ScreenMaxY - (int) PositionYActual);
 				P_VxActualProperty.set((int) VxActual);
 				P_VyActualProperty.set((int) VyActual);
-
 			}
 		});
 	}
@@ -192,16 +201,22 @@ public class Ball
 					if (balls.getBallNumber() != getBallNumber())
 					{
 						Shape collisionShape = Shape.intersect((Shape) balls.getBall(), ball);
-						boolean intersects = collisionShape.getBoundsInLocal().isEmpty();
-						if (!intersects && !collisionBits.isOccupied(balls.getBallNumber()))
+						boolean intersectsEmpty = collisionShape.getBoundsInLocal().isEmpty();
+						 if (!intersectsEmpty && !collisionBits.isOccupied(balls.getBallNumber()))
+						//if (!collisionBits.isOccupied(balls.getBallNumber()))
 						{
 							CollisionsCalculations.CollisionTwoBall(balls, BALL_OBS_LIST_REFERENCE.get(getBallNumber()));
 							collisionBits.setOccupied(balls.getBallNumber());
 							balls.collisionBits.setOccupied(ballNumber);
+							resetPosition();
 						}
-						if (intersects && collisionBits.isOccupied(balls.getBallNumber()))
+						 if (intersectsEmpty && collisionBits.isOccupied(balls.getBallNumber()))
+						//if (collisionBits.isOccupied(balls.getBallNumber()))
 						{
+							
+							System.out.println(ballNumber + "Reset Ball");
 							collisionBits.resetOccupied(balls.getBallNumber());
+							
 						}
 
 					}
@@ -255,6 +270,30 @@ public class Ball
 		}
 		VyActual = Vy0;
 		PositionYActual = PositionY;
+	}
+
+	public void resetPosition()
+	{
+		// System.out.println(String.format("Xa:%d Yx:%d - Xl:%d Yl:%d", (int)
+		// PositionXActual, (int) PositionYActual, (int) lastPositionX, (int)
+		// lastPositionY));
+		PositionXActual = lastPositionX;
+		PositionYActual = lastPositionY;
+		PositionX = lastPositionX;
+		PositionY = lastPositionY;
+		updatePosition();
+		// System.out.println("Restart position " + getBallNumber());
+
+	}
+
+	public void safeCollisionPosition()
+	{
+		lockPosition = true;
+	}
+
+	public void resetCollisionPosition()
+	{
+		lockPosition = false;
 	}
 
 	// Manual Movments

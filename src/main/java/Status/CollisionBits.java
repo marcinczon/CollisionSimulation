@@ -3,9 +3,12 @@ package Status;
 import static FX_Controllers.ControllerFXML_CollisionTable2.controllerFXML_CollisionTable2;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import Calculations.CollisionsCalculations;
 import GameObjects.Ball;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -17,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
+
 import static FX_Controllers.ControllerFXML_Base.controllerFXML_Base;
 
 public class CollisionBits
@@ -104,7 +109,10 @@ public class CollisionBits
 		private BooleanProperty booleanProperty = new SimpleBooleanProperty(true);
 		private Circle collisionPoint = new Circle();
 
+
 		private Ball referenceToCollisionBall;
+		Runnable runableCollisionBit;
+		Thread threadCollisionBit;
 
 		private int counter = 0;
 		private boolean occupied;
@@ -116,7 +124,7 @@ public class CollisionBits
 		private long tDelta = 0;
 
 		public statusBit(int statusForBall, boolean statusLock, Ball referenceToCollisionBall)
-		{
+		{		
 			this.referenceToCollisionBall = referenceToCollisionBall;
 			this.occupied = false;
 			this.booleanProperty.set(false);
@@ -133,28 +141,58 @@ public class CollisionBits
 					Button node = (Button) getNodeFromGridPane(controllerFXML_CollisionTable2.mainGrid, lockBall, statusForBall);
 					if (newValue == true && oldValue == false)
 					{
+						referenceToBaseBall.safeCollisionPosition();
 						tStart = System.currentTimeMillis();
 						node.setStyle(style2);
 						CollisionsCalculations.CalculateAngelAndPointOfCollision(referenceToBaseBall, referenceToCollisionBall, collisionPoint);
-						
 						collisionPoint.setFill(Color.GREEN);
-						System.out.println(String.format("Collision poitn x:%d y:%d",(int)collisionPoint.getCenterX(),(int)collisionPoint.getCenterY()));
+						// System.out.println(String.format("Collision poitn x:%d
+						// y:%d",(int)collisionPoint.getCenterX(),(int)collisionPoint.getCenterY()));
+						cyclickCheckingColision();
 					}
 					if (newValue == false && oldValue == true)
 					{
+						referenceToBaseBall.resetCollisionPosition();
 						tEnd = System.currentTimeMillis();
 						node.setStyle(style1);
 						tDelta = tEnd - tStart;
 						tEnd = 0;
 						tStart = 0;
-						//System.out.println(String.format("%d <-> %d Counter %d Time %d\n", lockBall, statusForBall, counter, tDelta));
+						System.out.println(String.format("%d <-> %d Counter %d Time %d\n", lockBall, statusForBall, counter, tDelta));
 						collisionPoint.setFill(Color.RED);
 					}
-
-					// Dokoncz mierzenie czasu jak trwa zderzenie
 				}
 			});
 
+		}
+		
+		private void cyclickCheckingColision()
+		{
+			runableCollisionBit = new Runnable()
+			{
+				public void run()
+				{
+					synchronized (this)
+					{
+						while (occupied)
+						{
+							referenceToBaseBall.resetPosition();
+							try
+							{
+								Thread.sleep(5);
+							} catch (InterruptedException e)
+							{
+								
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			};
+
+			threadCollisionBit = new Thread(runableCollisionBit);
+			threadCollisionBit.start();
+			threadCollisionBit.setName("Ball "+lockBall+" Cyclick Checking Collision Bit with: " + statusForBall);
 		}
 
 		// Function to find Node in GridPane by column and rows (matrix X x Y)

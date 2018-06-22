@@ -11,7 +11,7 @@ import javafx.scene.Node;
 
 public class BallController
 {
-	private int newBalls = 1;
+	private int newBalls = 2;
 
 	private int ScreenSizeX = 0;
 	private int ScreenSizeY = 0;
