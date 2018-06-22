@@ -8,14 +8,10 @@ import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-
+import static GameObjects.GeneralParameters.generalParameters;
 public class BallController
 {
-	private int newBalls = 2;
 
-	private int ScreenSizeX = 0;
-	private int ScreenSizeY = 0;
-	
 
 
 	static ObservableList<Ball> BALL_OBS_LIST = FXCollections.observableArrayList();
@@ -29,7 +25,7 @@ public class BallController
 	public void addFewBalls()
 	{
 		Random rand = new Random();
-		for (int i = 0; i < newBalls; i++)
+		for (int i = 0; i < generalParameters.getNewBalls(); i++)
 		{
 			addNewBall();
 			try
@@ -47,9 +43,8 @@ public class BallController
 	{
 		Ball ball = new Ball(BALL_OBS_LIST);
 		Random random = new Random();
-		ball.setMaxPosition(700, 500);
 		ball.setStartSpeed(random.nextInt(200) - 100, random.nextInt(200) - 100);
-		ball.setStartPosition(random.nextInt(700), random.nextInt(500));
+		ball.setStartPosition(random.nextInt(200), random.nextInt(200));
 		ball.setReferenceBallList(BALL_OBS_LIST);
 		BALL_OBS_LIST.add(ball);
 		
@@ -71,39 +66,9 @@ public class BallController
 		return nodeList;
 	}
 
-	public void updateScreenSize()
-	{
-		for (Ball ball : BALL_OBS_LIST)
-		{
-			ball.setMaxPosition(ScreenSizeX, ScreenSizeY);
-		}
-	}
-
 	public static ObservableList<Ball> getBallList()
 	{
 		return BALL_OBS_LIST;
-	}
-
-	public int getScreenSizeX()
-	{
-		return ScreenSizeX;
-	}
-
-	public void setScreenSizeX(int screenSizeX)
-	{
-		ScreenSizeX = screenSizeX;
-		updateScreenSize();
-	}
-
-	public int getScreenSizeY()
-	{
-		return ScreenSizeY;
-	}
-
-	public void setScreenSizeY(int screenSizeY)
-	{
-		ScreenSizeY = screenSizeY;
-		updateScreenSize();
 	}
 
 	public static ObservableList<Ball> getBALL_OBS_LIST()

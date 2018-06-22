@@ -24,6 +24,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+import static GameObjects.ScreenParameter.screenParameter;
+import static GameObjects.GeneralParameters.generalParameters;
+
 public class ControllerFXML_Base implements Initializable
 {
 	public static ControllerFXML_Base controllerFXML_Base;
@@ -101,7 +104,7 @@ public class ControllerFXML_Base implements Initializable
 		// Creating Table
 
 		NodeTable.setStyle("-fx-font-size:12px;");
-		numberColumn.setCellValueFactory(new PropertyValueFactory<Ball, Integer>("P_BallNumber"));
+		numberColumn.setCellValueFactory(new PropertyValueFactory<Ball, Integer>("P_BaseNumber"));
 		numberColumn.setPrefWidth(50);
 		PosXColumn.setCellValueFactory(new PropertyValueFactory<Ball, Integer>("P_PosX"));
 		PosXColumn.setPrefWidth(50);
@@ -150,7 +153,7 @@ public class ControllerFXML_Base implements Initializable
 				{
 					if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
 					{
-						BALL_OBS_LIST_REFERENCE.get(ballSelected).setVyActual(BALL_OBS_LIST_REFERENCE.get(ballSelected).getVyActual() - increaseManualVelocity);
+						BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityY(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityY() - increaseManualVelocity);
 					}
 					if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
 					{
@@ -166,7 +169,7 @@ public class ControllerFXML_Base implements Initializable
 			{
 				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
 				{
-					BALL_OBS_LIST_REFERENCE.get(ballSelected).setVyActual(BALL_OBS_LIST_REFERENCE.get(ballSelected).getVyActual() + increaseManualVelocity);
+					BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityY(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityY() + increaseManualVelocity);
 				}
 				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
 				{
@@ -181,7 +184,7 @@ public class ControllerFXML_Base implements Initializable
 			{
 				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
 				{
-					BALL_OBS_LIST_REFERENCE.get(ballSelected).setVxActual(BALL_OBS_LIST_REFERENCE.get(ballSelected).getVxActual() - increaseManualVelocity);
+					BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityX(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityX() - increaseManualVelocity);
 				}
 				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
 				{
@@ -196,7 +199,7 @@ public class ControllerFXML_Base implements Initializable
 			{
 				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
 				{
-					BALL_OBS_LIST_REFERENCE.get(ballSelected).setVxActual(BALL_OBS_LIST_REFERENCE.get(ballSelected).getVxActual() + increaseManualVelocity);
+					BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityX(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityX() + increaseManualVelocity);
 				}
 				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
 				{
@@ -209,8 +212,8 @@ public class ControllerFXML_Base implements Initializable
 		{
 			public void handle(MouseEvent event)
 			{
-				BALL_OBS_LIST_REFERENCE.get(ballSelected).setVxActual(0);
-				BALL_OBS_LIST_REFERENCE.get(ballSelected).setVyActual(0);
+				BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityX(0);
+				BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityY(0);
 			}
 		});
 
@@ -218,7 +221,7 @@ public class ControllerFXML_Base implements Initializable
 
 		inputGravity.textProperty().addListener((observable, oldValue, newValue) ->
 		{
-			BALL_OBS_LIST_REFERENCE.stream().forEach(s -> s.setGravity(Double.parseDouble(newValue)));
+			generalParameters.setGravity(Integer.parseInt(newValue));
 		});
 
 		NodeTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) ->
@@ -226,13 +229,13 @@ public class ControllerFXML_Base implements Initializable
 			System.out.println(newSelection.toString());
 			newSelection.setRED();
 			oldSelection.setGray();
-			ballSelected = newSelection.getBallNumber();
+			ballSelected = newSelection.getParameter().getBaseNumber();
 		});
 
 		// Set Screnn Size for Game
 
-		ballController.setScreenSizeX((int) RIGHT_PANE.getPrefWidth());
-		ballController.setScreenSizeY((int) RIGHT_PANE.getPrefHeight());
+		screenParameter.setScreenMaxX((int) RIGHT_PANE.getPrefWidth());
+		screenParameter.setScreenMaxY((int) RIGHT_PANE.getPrefHeight());
 
 	}
 

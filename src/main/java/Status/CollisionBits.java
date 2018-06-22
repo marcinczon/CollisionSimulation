@@ -47,7 +47,7 @@ public class CollisionBits
 	public CollisionBits(ObservableList<Ball> ballListReference, Ball baseBall)
 	{
 		this.BALL_OBS_LIST_REFERENCE = ballListReference;
-		this.lockBall = baseBall.getBallNumber();
+		this.lockBall = baseBall.getParameter().getBaseNumber();
 		this.referenceToBaseBall = baseBall;
 
 		bitRange = BALL_OBS_LIST_REFERENCE.size();

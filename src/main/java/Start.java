@@ -1,6 +1,8 @@
 
 import FX_Controllers.ControllerFXML_Base;
 import FX_Controllers.ControllerFXML_CollisionTable2;
+import GameObjects.GeneralParameters;
+import GameObjects.ScreenParameter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,6 +21,9 @@ public class Start extends Application
 	//Reference to class
 //	static ControllerFXML_Base controllerFXML_Base = new ControllerFXML_Base();
 
+	static GeneralParameters generalParameters =  new GeneralParameters();
+	static ScreenParameter screenParameter = new ScreenParameter();
+	
 	static Stage stage2 = new Stage();
 	static Stage stage3 = new Stage();
 	static Parent parent3;

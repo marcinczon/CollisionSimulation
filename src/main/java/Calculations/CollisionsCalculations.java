@@ -14,14 +14,14 @@ public class CollisionsCalculations
 		// Calculation of velocity two balls based on energy and momentum
 		// mV^/2=E i p=mv
 		// *********************************************** //
-		double Ux1 = Ball_1.getVxActual();
-		double Ux2 = Ball_2.getVxActual();
+		double Ux1 = Ball_1.getParameter().getVelocityX();
+		double Ux2 = Ball_2.getParameter().getVelocityX();
 
-		double Uy1 = Ball_1.getVyActual();
-		double Uy2 = Ball_2.getVyActual();
+		double Uy1 = Ball_1.getParameter().getVelocityY();
+		double Uy2 = Ball_2.getParameter().getVelocityY();
 
-		double m1 = Ball_1.getSize();
-		double m2 = Ball_2.getSize();
+		double m1 = Ball_1.getParameter().getWeight();
+		double m2 = Ball_2.getParameter().getWeight();
 
 		double Vx1 = 0, Vx2 = 0, Vy1 = 0, Vy2 = 0;
 
@@ -31,34 +31,34 @@ public class CollisionsCalculations
 		Vx2 = (Ux2 * (m2 - m1) + 2 * m1 * Ux1) / (m2 + m1);
 		Vy2 = (Uy2 * (m2 - m1) + 2 * m1 * Uy1) / (m2 + m1);
 
-		Ball_1.setVxActual(Vx1);
-		Ball_2.setVxActual(Vx2);
+		Ball_1.getParameter().setVelocityX(Vx1);
+		Ball_2.getParameter().setVelocityX(Vx2);
 
-		Ball_1.setVyActual(Vy1);
-		Ball_2.setVyActual(Vy2);
+		Ball_1.getParameter().setVelocityY(Vy1);
+		Ball_2.getParameter().setVelocityY(Vy2);
 	}
 
-	public static void CollisionTwoBallSimple(Ball Ball_1, Ball Ball_2)
-	{
-		// *********************************************** //
-		// Calculation of velocity two balls based on energy and momentum
-		// mV^/2=E i p=mv
-		// *********************************************** //
-		double Ux1 = Ball_1.getVxActual();
-		double Ux2 = Ball_2.getVxActual();
-
-		double Uy1 = Ball_1.getVyActual();
-		double Uy2 = Ball_2.getVyActual();
-
-		double m1 = Ball_1.getSize();
-		double m2 = Ball_2.getSize();
-
-		Ball_1.setVxActual(-Ux1);
-		Ball_2.setVxActual(-Ux2);
-
-		Ball_1.setVyActual(-Uy1);
-		Ball_2.setVyActual(-Uy2);
-	}
+//	public static void CollisionTwoBallSimple(Ball Ball_1, Ball Ball_2)
+//	{
+//		// *********************************************** //
+//		// Calculation of velocity two balls based on energy and momentum
+//		// mV^/2=E i p=mv
+//		// *********************************************** //
+//		double Ux1 = Ball_1.getVxActual();
+//		double Ux2 = Ball_2.getVxActual();
+//
+//		double Uy1 = Ball_1.getVyActual();
+//		double Uy2 = Ball_2.getVyActual();
+//
+//		double m1 = Ball_1.getSize();
+//		double m2 = Ball_2.getSize();
+//
+//		Ball_1.setVxActual(-Ux1);
+//		Ball_2.setVxActual(-Ux2);
+//
+//		Ball_1.setVyActual(-Uy1);
+//		Ball_2.setVyActual(-Uy2);
+//	}
 
 	public static void CalculateAngelAndPointOfCollision(Ball Ball_1, Ball Ball_2, Circle collisionPoint)
 	{
@@ -69,12 +69,14 @@ public class CollisionsCalculations
 
 		// Obliczenia trygonometryczne
 		
-		double posX_Ball_1 = Ball_1.getPositionXActual();
-		double posX_Ball_2 = Ball_2.getPositionXActual();
-		double posY_Ball_1 = Ball_1.getPositionYActual();
-		double posY_Ball_2 = Ball_2.getPositionYActual();
-		double radius_Ball_1 = Ball_1.getShape().getRadius();
-		double radius_Ball_2 = Ball_2.getShape().getRadius();
+		double posX_Ball_1 = Ball_1.getParameter().getPositionX();
+		double posX_Ball_2 = Ball_2.getParameter().getPositionX();
+		
+		double posY_Ball_1 = Ball_1.getParameter().getPositionY();
+		double posY_Ball_2 = Ball_2.getParameter().getPositionY();
+		
+		double radius_Ball_1 = Ball_1.getCircle().getRadius();
+		double radius_Ball_2 = Ball_2.getCircle().getRadius();
 
 		double sumX = 0;
 		double sumY = 0;
