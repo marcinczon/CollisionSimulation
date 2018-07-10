@@ -13,6 +13,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
+
 
 public class ControllerFXML_ThreadTable implements Initializable
 {

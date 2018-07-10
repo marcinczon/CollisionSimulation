@@ -3,6 +3,8 @@ package GameObjects;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
+import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
+
 
 public class BallParameter
 {

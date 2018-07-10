@@ -1,4 +1,4 @@
-package GameObjects;
+package Parameters;
 
 public class ScreenParameter
 {

@@ -1,5 +1,7 @@
 package GameObjects;
 
+import static Parameters.ScreenParameter.screenParameter;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,8 +17,8 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
+import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
 
-import static GameObjects.ScreenParameter.screenParameter;
 
 public class Ball
 {
@@ -28,13 +30,12 @@ public class Ball
 	// Internal use class
 	private BallParameter parameter = new BallParameter();
 	private PhysicsCalculations physicsCalculations = new PhysicsCalculations(parameter);
+	private CollisionsCalculations collisionsCalculations = new CollisionsCalculations();
 	private CollisionBits collisionBits;
 
-	
 	// JavaFX class
 	private Circle circle = new Circle();;
 	private Label labelNumber = new Label();
-	private ArrayList<Node> nodeList = new ArrayList<Node>();
 
 	// Threads
 	private Thread threadCollisionDetetion;
@@ -52,20 +53,19 @@ public class Ball
 		this.BALL_OBS_LIST_REFERENCE = BALL_OBS_LIST_REFERENCE;
 
 		// Set start parameters
-		initializeStartParameters();
-		setGray();
-		initialize();
-		calculationsCollision();
+		initializeParameters();
+		initializePhisicsThreed();
+		initializeCollisionThreed();
 	}
 
-	public void initializeStartParameters()
+	public void initializeParameters()
 	{
 		labelNumber.setText(String.format("%d", parameter.getBaseNumber()));
-		parameter.setWeight(random.nextInt(20));
+		parameter.setWeight(random.nextInt(20) + 20);
 		circle.setRadius(parameter.getWeight());
 	}
 
-	public void initialize()
+	public void initializePhisicsThreed()
 	{
 		runnablePhysicCalc = new Runnable()
 		{
@@ -88,7 +88,7 @@ public class Ball
 
 						} catch (InterruptedException e)
 						{
-							System.err.println(e.toString());
+							controllerFXML_MessageTable.appendMessage(e.toString());
 						}
 					}
 				}
@@ -101,23 +101,8 @@ public class Ball
 
 	}
 
-	public void updatePosition()
+	public void initializeCollisionThreed()
 	{
-		Platform.runLater(new Runnable()
-		{
-			public void run()
-			{
-				circle.setCenterX(parameter.getPositionX());
-				circle.setCenterY(parameter.getPositionY());
-				labelNumber.setLayoutX(parameter.getPositionX());
-				labelNumber.setLayoutY(parameter.getPositionY());
-			}
-		});
-	}
-
-	public void calculationsCollision()
-	{
-
 		runableCollisionDetetion = new Runnable()
 		{
 			public void run()
@@ -160,21 +145,36 @@ public class Ball
 						boolean intersectsEmpty = collisionShape.getBoundsInLocal().isEmpty();
 						if (!intersectsEmpty && !collisionBits.isOccupied(balls.getParameter().getBaseNumber()))
 						{
-							CollisionsCalculations.CollisionTwoBall(balls, BALL_OBS_LIST_REFERENCE.get(getParameter().getBaseNumber()));
+							collisionsCalculations.CollisionTwoBall(balls, BALL_OBS_LIST_REFERENCE.get(getParameter().getBaseNumber()));
 							collisionBits.setOccupied(balls.getParameter().getBaseNumber());
 							balls.collisionBits.setOccupied(parameter.getBaseNumber());
-							resetPosition();
+							balls.setRed();
+							//resetPosition();
 						}
 						if (intersectsEmpty && collisionBits.isOccupied(balls.getParameter().getBaseNumber()))
 						{
 
-							System.out.println(parameter.getBaseNumber() + "Reset Ball");
+							controllerFXML_MessageTable.appendMessage(parameter.getBaseNumber() + " Reset Ball");
 							collisionBits.resetOccupied(balls.getParameter().getBaseNumber());
 
 						}
 
 					}
 				}
+			}
+		});
+	}
+
+	public void updatePosition()
+	{
+		Platform.runLater(new Runnable()
+		{
+			public void run()
+			{
+				circle.setCenterX(parameter.getPositionX());
+				circle.setCenterY(parameter.getPositionY());
+				labelNumber.setLayoutX(parameter.getPositionX());
+				labelNumber.setLayoutY(parameter.getPositionY());
 			}
 		});
 	}
@@ -233,10 +233,13 @@ public class Ball
 	{
 		return circle;
 	}
+
 	public ArrayList<Node> getNodes()
 	{
+		ArrayList<Node> nodeList = new ArrayList<Node>();
 		nodeList.add(circle);
 		nodeList.add(labelNumber);
+		nodeList.addAll(collisionBits.getNodes());
 		return nodeList;
 	}
 
@@ -256,17 +259,19 @@ public class Ball
 		parameter.setPositionX(startPosX);
 		parameter.setPositionY(startPosY);
 	}
+
 	public void setReferenceBallList(ObservableList<Ball> BALL_OBS_LIST_REFERENCE)
 	{
 		this.BALL_OBS_LIST_REFERENCE = BALL_OBS_LIST_REFERENCE;
 		collisionBits = new CollisionBits(BALL_OBS_LIST_REFERENCE, ballBaseReference);
 	}
+
 	public void setGray()
 	{
 		circle.setFill(Color.GRAY);
 	}
 
-	public void setRED()
+	public void setRed()
 	{
 		circle.setFill(Color.RED);
 	}

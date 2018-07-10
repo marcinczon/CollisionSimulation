@@ -2,6 +2,9 @@ package FX_Controllers;
 
 import static FX_Controllers.ControllerFXML_CollisionTable.controllerFXML_CollisionTable;
 import static FX_Controllers.ControllerFXML_ThreadTable.controllerFXML_ThreadTable;
+import static Parameters.GeneralParameters.generalParameters;
+import static Parameters.ScreenParameter.screenParameter;
+import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,8 +29,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
-import static Parameters.GeneralParameters.generalParameters;
-import static Parameters.ScreenParameter.screenParameter;
+
+
 
 public class ControllerFXML_Base implements Initializable
 {
@@ -232,7 +235,7 @@ public class ControllerFXML_Base implements Initializable
 
 		NodeTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) ->
 		{
-			// System.out.println(newSelection.toString());
+			 System.out.println(newSelection.toString());
 			// newSelection.setRED();
 			// oldSelection.setGray();
 			// ballSelected = newSelection.getParameter().getBaseNumber();

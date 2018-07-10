@@ -1,6 +1,8 @@
 package Status;
 
 import static FX_Controllers.ControllerFXML_CollisionTable.controllerFXML_CollisionTable;
+import static FX_Controllers.ControllerFXML_Base.controllerFXML_Base;
+import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -22,8 +24,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-
-import static FX_Controllers.ControllerFXML_Base.controllerFXML_Base;
 
 public class CollisionBits implements GeneralString
 {
@@ -149,7 +149,7 @@ public class CollisionBits implements GeneralString
 						tEnd = System.currentTimeMillis();
 						node.setStyle(styleButton1);
 						tDelta = tEnd - tStart;
-						System.out.println(String.format("%d <-> %d Counter %d Time %d\n", lockBall, statusForBall, counter, tDelta));
+						controllerFXML_MessageTable.appendMessage(String.format("%d <-> %d Counter %d Time %d", lockBall, statusForBall, counter, tDelta));
 						collisionPoint.setFill(Color.RED);
 					}
 				}

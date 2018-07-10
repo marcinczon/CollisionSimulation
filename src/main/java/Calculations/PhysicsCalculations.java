@@ -2,8 +2,10 @@ package Calculations;
 
 import GameObjects.BallParameter;
 
-import static GameObjects.ScreenParameter.screenParameter;
-import static GameObjects.GeneralParameters.generalParameters;
+import static Parameters.GeneralParameters.generalParameters;
+import static Parameters.ScreenParameter.screenParameter;
+import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
+
 
 public class PhysicsCalculations
 {

@@ -20,6 +20,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
+
 
 public class ControllerFXML_CollisionTable implements Initializable, GeneralString
 {
@@ -76,6 +78,7 @@ public class ControllerFXML_CollisionTable implements Initializable, GeneralStri
 			public void handle(MouseEvent event)
 			{
 				System.out.println(name + " " + column + " " + row);
+				controllerFXML_MessageTable.appendMessage(name + " " + column + " " + row);
 				// Connect button to associated collision status
 			}
 		});

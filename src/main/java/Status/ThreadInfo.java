@@ -1,5 +1,7 @@
 package Status;
 
+import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;

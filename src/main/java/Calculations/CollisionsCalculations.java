@@ -5,9 +5,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import static FX_Controllers.ControllerFXML_Base.controllerFXML_Base;
+import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
+
+
 
 public class CollisionsCalculations
 {
+	public static CollisionsCalculations collisionsCalculations;
+	
+	public CollisionsCalculations()
+	{
+		collisionsCalculations = this;
+	}
 	public static void CollisionTwoBall(Ball Ball_1, Ball Ball_2)
 	{
 		// *********************************************** //
@@ -163,7 +172,7 @@ public class CollisionsCalculations
 		collisionPoint.setCenterX(xColision);
 		collisionPoint.setCenterY(yColision);
 		collisionPoint.setRadius(3);
-		collisionPoint.setFill(Color.BLUE);
+		collisionPoint.setFill(Color.RED);
 	}
 
 }

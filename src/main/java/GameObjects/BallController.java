@@ -2,6 +2,7 @@ package GameObjects;
 
 import static FX_Controllers.ControllerFXML_CollisionTable.controllerFXML_CollisionTable;
 import static Parameters.GeneralParameters.generalParameters;
+import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -9,15 +10,16 @@ import java.util.Random;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+
 public class BallController
 {
 	static ObservableList<Ball> BALL_OBS_LIST = FXCollections.observableArrayList();
-	
+
 	public BallController()
 	{
-		System.out.println("Creating ball controller");		
+		controllerFXML_MessageTable.appendMessage("Creating ball controller");
 	}
-	
+
 	public void addFewBalls()
 	{
 		Random rand = new Random();
@@ -47,7 +49,7 @@ public class BallController
 		ball.setStartPosition(random.nextInt(200), random.nextInt(200));
 		ball.setReferenceBallList(BALL_OBS_LIST);
 		BALL_OBS_LIST.add(ball);
-		
+
 	}
 
 	public void removeBallFromList(int index)

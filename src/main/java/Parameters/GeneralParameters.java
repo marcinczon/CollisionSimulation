@@ -1,4 +1,4 @@
-package GameObjects;
+package Parameters;
 
 public class GeneralParameters
 {
@@ -12,7 +12,7 @@ public class GeneralParameters
 
 	private double Timing = 0.05;
 	private double Gravity = 9.8;
-	private int newBalls = 10;
+	private int newBalls = 4;
 
 	public double getTiming()
 	{
