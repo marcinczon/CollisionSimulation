@@ -123,8 +123,7 @@ public class CollisionBits implements GeneralString
 			this.booleanProperty.set(false);
 			this.statusLock = statusLock;
 			this.statusForBall = statusForBall;
-	//		controllerFXML_Base.addObjectToPane(collisionPoint);
-			
+		
 			controllerFXML_Base.getRIGHT_PANE().getChildren().add(collisionPoint);
 
 			booleanProperty.addListener(new ChangeListener<Boolean>()
@@ -141,7 +140,6 @@ public class CollisionBits implements GeneralString
 						node.setStyle(styleButton2);
 						collisionsCalculations.CalculateAngelAndPointOfCollision(referenceToBaseBall, referenceToCollisionBall, collisionPoint);
 						collisionPoint.setFill(Color.GREEN);
-						//cyclickCheckingColision();
 					}
 					if (newValue == false && oldValue == true)
 					{
@@ -150,7 +148,7 @@ public class CollisionBits implements GeneralString
 						node.setStyle(styleButton1);
 						tDelta = tEnd - tStart;
 						controllerFXML_MessageTable.appendMessage(String.format("%d <-> %d Counter %d Time %d", lockBall, statusForBall, counter, tDelta));
-						collisionPoint.setFill(Color.RED);
+						collisionPoint.setFill(Color.TRANSPARENT);
 					}
 				}
 			});

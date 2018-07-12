@@ -7,6 +7,7 @@ import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageT
 public class BallConnectionLine
 {
 	// Add connection lines between all balls.
+	// Not finished
 	
 	private ObservableList<Ball> BALL_OBS_LIST_REFERENCE;
 

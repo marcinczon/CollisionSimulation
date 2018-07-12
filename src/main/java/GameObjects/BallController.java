@@ -41,6 +41,17 @@ public class BallController
 		}
 	}
 
+	public void createBall(int posX, int posY, int speedX, int speedY)
+	{
+		addNewBall(posX, posY, speedX, speedY);
+
+		for (Ball ball : BALL_OBS_LIST)
+		{
+			ball.updateStatusBit();
+		}
+
+	}
+
 	public void addNewBall()
 	{
 		Ball ball = new Ball(BALL_OBS_LIST);
@@ -50,6 +61,16 @@ public class BallController
 		ball.setReferenceBallList(BALL_OBS_LIST);
 		BALL_OBS_LIST.add(ball);
 
+	}
+
+	public void addNewBall(int posX, int posY, int speedX, int speedY)
+	{
+		Ball ball = new Ball(BALL_OBS_LIST);
+		Random random = new Random();
+		ball.setStartPosition(posX, posY);
+		ball.setStartSpeed(speedX, speedY);
+		ball.setReferenceBallList(BALL_OBS_LIST);
+		BALL_OBS_LIST.add(ball);
 	}
 
 	public void removeBallFromList(int index)

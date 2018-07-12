@@ -9,6 +9,8 @@ import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageT
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.sun.prism.paint.Color;
+
 import GameObjects.Ball;
 import GameObjects.BallController;
 import GameObjects.BallParameter;
@@ -28,9 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-
-
-
+import javafx.scene.shape.Line;
 
 public class ControllerFXML_Base implements Initializable
 {
@@ -41,6 +41,12 @@ public class ControllerFXML_Base implements Initializable
 	private ObservableList<BallParameter> BALL_PARAMETER_OBS_LIST = FXCollections.observableArrayList();
 	private int ballSelected = 0;
 	private int increaseManualVelocity = 10;
+
+	// TEMP-----------
+	double orgSceneX, orgSceneY;
+	double orgTranslateX, orgTranslateY;
+	Line line = new Line();
+	// --------------------
 
 	// FXML ITEMS
 
@@ -103,6 +109,8 @@ public class ControllerFXML_Base implements Initializable
 
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
+		RIGHT_PANE.getChildren().add(line);
+
 		controllerFXML_Base = this;
 
 		BALL_OBS_LIST_REFERENCE = ballController.getBallList();
@@ -126,7 +134,7 @@ public class ControllerFXML_Base implements Initializable
 		VyColumn.setPrefWidth(50);
 		WeightColumn.setCellValueFactory(new PropertyValueFactory<BallParameter, Integer>("P_Weight"));
 		WeightColumn.setPrefWidth(50);
-		NodeTable.getColumns().addAll(numberColumn, PosXColumn, PosYColumn, VxColumn, VyColumn,WeightColumn);
+		NodeTable.getColumns().addAll(numberColumn, PosXColumn, PosYColumn, VxColumn, VyColumn, WeightColumn);
 		NodeTable.setItems(BALL_PARAMETER_OBS_LIST);
 
 		// Choice Box Parameters
@@ -235,11 +243,12 @@ public class ControllerFXML_Base implements Initializable
 
 		NodeTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) ->
 		{
-			 System.out.println(newSelection.toString());
-			// newSelection.setRED();
-			// oldSelection.setGray();
-			// ballSelected = newSelection.getParameter().getBaseNumber();
+			System.out.println(newSelection.toString());
 		});
+
+		RIGHT_PANE.setOnMousePressed(paneOnMousePressedEventHandler);
+		RIGHT_PANE.setOnMouseDragged(paneOnMouseDraggedEventHandler);
+		RIGHT_PANE.setOnMouseReleased(paneOnMouseRealisedEvenetHandler);
 
 		// Set Screnn Size for Game
 
@@ -247,6 +256,45 @@ public class ControllerFXML_Base implements Initializable
 		screenParameter.setScreenMaxY((int) RIGHT_PANE.getPrefHeight());
 
 	}
+
+	EventHandler<MouseEvent> paneOnMousePressedEventHandler = new EventHandler<MouseEvent>()
+	{
+		@Override
+		public void handle(MouseEvent t)
+		{
+			line.setVisible(true);
+			line.setStartX(t.getX());
+			line.setStartY(t.getY());
+		}
+	};
+
+	EventHandler<MouseEvent> paneOnMouseDraggedEventHandler = new EventHandler<MouseEvent>()
+	{
+
+		@Override
+		public void handle(MouseEvent t)
+		{
+			line.setEndX(t.getX());
+			line.setEndY(t.getY());
+		}
+	};
+	EventHandler<MouseEvent> paneOnMouseRealisedEvenetHandler = new EventHandler<MouseEvent>()
+	{
+
+		@Override
+		public void handle(MouseEvent event)
+		{
+
+			ballController.createBall((int) line.getStartX(), (int) line.getStartY(), (int) (line.getStartX() - line.getEndX()), (int) (line.getStartY() - line.getEndY()));
+			RIGHT_PANE.getChildren().clear();
+			RIGHT_PANE.getChildren().addAll(ballController.getNodeFromBallList());
+
+			updateTable();
+			ControllerFXML_ThreadTable.threadList();
+			controllerFXML_CollisionTable.generateColisionBitTable();
+
+		}
+	};
 
 	public int getScreenSizeX()
 	{
@@ -260,7 +308,7 @@ public class ControllerFXML_Base implements Initializable
 
 	public void addObjectToPane(Node shape)
 	{
-		//shape.
+		// shape.
 		RIGHT_PANE.getChildren().add(shape);
 	}
 
@@ -277,7 +325,5 @@ public class ControllerFXML_Base implements Initializable
 	{
 		return RIGHT_PANE;
 	}
-
-
 
 }

@@ -64,18 +64,22 @@ public class Start extends Application
 
 			primaryStage.setScene(scene1);
 			primaryStage.setResizable(false);
+			primaryStage.setTitle("Simulation");
 			primaryStage.show();
 
 			stage2.setScene(scene2);
 			stage2.setResizable(true);
+			stage2.setTitle("Threed");
 			stage2.show();
 
 			stage3.setScene(scene3);
 			stage3.setResizable(true);
+			stage3.setTitle("Collision");
 			stage3.show();
 
 			stage4.setScene(scene4);
 			stage4.setResizable(false);
+			stage4.setTitle("Messages");
 			stage4.show();
 
 		} catch (Exception e)

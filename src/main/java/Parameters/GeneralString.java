@@ -4,6 +4,7 @@ public interface GeneralString
 {
 	static String styleButton1 = "-fx-base: LIGHTGRAY";
 	static String styleButton2 = "-fx-base: RED";
+	static String styleCollisionPoint = "-fx-base: GREEN";
 	static String styleCollPoint1 = "";
 	static String styleCollPoint2 = "";
 
