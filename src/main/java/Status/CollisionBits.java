@@ -124,7 +124,7 @@ public class CollisionBits implements GeneralString
 			this.statusLock = statusLock;
 			this.statusForBall = statusForBall;
 		
-			controllerFXML_Base.getRIGHT_PANE().getChildren().add(collisionPoint);
+			controllerFXML_Base.getRightPane().getChildren().add(collisionPoint);
 
 			booleanProperty.addListener(new ChangeListener<Boolean>()
 			{

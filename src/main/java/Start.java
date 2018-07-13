@@ -10,10 +10,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import main.StartInterface;
 
-public class Start extends Application
+public class Start extends Application implements StartInterface
 {
 
+	public static Start start;
 	// Future work
 	// - Change calculating of ball, cant move thrue each other
 	// - Add paddle to play
@@ -29,24 +31,29 @@ public class Start extends Application
 	static Parent collisionTableParrent;
 	static Parent messageParent;
 
-	public static void ShowStage2()
+	public Start()
+	{
+		start = this;
+	}
+
+	public void test()
+	{
+		System.out.println("asdasd");
+	}
+
+	public void ShowStage2()
 	{
 		stage2.show();
 	}
 
-	public static void ShowStage3()
+	public void ShowStage3()
 	{
 		stage3.show();
 	}
 
-	public static void ShowStage4()
+	public void ShowStage4()
 	{
 		stage4.show();
-	}
-
-	public static void main(String[] args)
-	{
-		launch();
 	}
 
 	@Override
@@ -83,16 +90,21 @@ public class Start extends Application
 			stage4.setResizable(false);
 			stage4.setTitle("Messages");
 			stage4.show();
-			
-			 Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-			 primaryStage.setX(0);
-			 primaryStage.setY(0);
 
+			Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+			primaryStage.setX(0);
+			primaryStage.setY(0);
 
 		} catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public static void main(String[] args)
+	{
+
+		launch();
 	}
 
 }

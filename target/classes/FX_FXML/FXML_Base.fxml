@@ -5,58 +5,91 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FX_Controllers.ControllerFXML_Base">
+<SplitPane fx:id="SplitPane" dividerPositions="0.3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FX_Controllers.ControllerFXML_Base">
    <items>
-      <Pane fx:id="LEFT_PANE" style="-fx-background-color: LIGHTGRAY;">
-         <children>
-            <VBox alignment="CENTER" layoutX="2.0" prefHeight="598.0" prefWidth="303.0" spacing="10.0">
-               <children>
-                  <GridPane alignment="CENTER" prefHeight="139.0" prefWidth="188.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" prefWidth="52.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" prefWidth="52.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" prefWidth="52.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints prefHeight="52.0" vgrow="SOMETIMES" />
-                      <RowConstraints prefHeight="52.0" vgrow="SOMETIMES" />
-                      <RowConstraints prefHeight="52.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Controll">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="ButtonAddBall" mnemonicParsing="false" text="+" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <Button fx:id="Left" alignment="CENTER" mnemonicParsing="false" text="←" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <Button fx:id="Up" alignment="CENTER" mnemonicParsing="false" text="↑" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Button fx:id="Right" alignment="CENTER" mnemonicParsing="false" text="→" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <Button fx:id="Down" alignment="CENTER" mnemonicParsing="false" text="↓" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-                        <TextField fx:id="inputGravity" alignment="CENTER_RIGHT" text="9.8" />
-                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                        <Pane fx:id="LEFT_PANE" style="-fx-background-color: LIGHTGRAY;">
                            <children>
-                              <ChoiceBox fx:id="choiceBoxMode" prefWidth="150.0" />
-                           </children></VBox>
-                        <Button fx:id="buttonThreads" mnemonicParsing="false" onMouseClicked="#buttonThreadClicked" prefHeight="31.0" prefWidth="114.0" text="Threads" GridPane.columnIndex="2" />
-                        <Button fx:id="buttonZero" mnemonicParsing="false" prefHeight="31.0" prefWidth="113.0" text="Zero" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <VBox fx:id="LVbox" alignment="CENTER" layoutX="2.0" prefHeight="598.0" prefWidth="303.0" spacing="10.0">
+                                 <children>
+                                    <GridPane alignment="CENTER" prefHeight="139.0" prefWidth="188.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" prefWidth="52.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" prefWidth="52.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" prefWidth="52.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints prefHeight="52.0" vgrow="SOMETIMES" />
+                                          <RowConstraints prefHeight="52.0" vgrow="SOMETIMES" />
+                                          <RowConstraints prefHeight="52.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Button fx:id="ButtonAddBall" mnemonicParsing="false" onMouseClicked="#plusClicked" text="+" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                          <Button fx:id="Left" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#rightClicked" text="←" textAlignment="CENTER" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                          <Button fx:id="Up" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#upClicked" text="↑" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                          <Button fx:id="Right" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#leftClicked" text="→" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                          <Button fx:id="Down" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#downClicked" text="↓" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                          <TextField fx:id="inputGravity" alignment="CENTER_RIGHT" text="9.8" />
+                                          <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                                             <children>
+                                                <ChoiceBox fx:id="choiceBoxMode" prefWidth="150.0" />
+                                             </children>
+                                          </VBox>
+                                          <Button fx:id="buttonZero" mnemonicParsing="false" onMouseClicked="#zeroClicked" prefHeight="31.0" prefWidth="113.0" text="Zero" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </opaqueInsets>
+                                    </GridPane>
+                                    <TableView fx:id="NodeTable" prefHeight="377.0" prefWidth="188.0" />
+                                    <Label fx:id="Label_Status" prefHeight="21.0" prefWidth="188.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </Pane>
                      </children>
-                     <opaqueInsets>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </opaqueInsets>
-                  </GridPane>
-                  <TableView fx:id="NodeTable" prefHeight="377.0" prefWidth="188.0" />
-                  <Label fx:id="Label_Status" prefHeight="21.0" prefWidth="188.0" />
-               </children>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </VBox>
-         </children>
-      </Pane>
-      <Pane fx:id="RIGHT_PANE" prefHeight="598.0" prefWidth="711.0" style="-fx-background-color: WHITE;" />
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Window">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Button fx:id="buttonThreads" mnemonicParsing="false" onMouseClicked="#buttonThreadClicked" prefHeight="31.0" prefWidth="114.0" text="Threads" />
+                              <Button fx:id="buttonCollisions" mnemonicParsing="false" onMouseClicked="#buttonCollisionsClicked" prefHeight="31.0" prefWidth="114.0" text="Collisions" />
+                              <Button fx:id="buttonMessages" mnemonicParsing="false" onMouseClicked="#buttonMessagesClicked" prefHeight="31.0" prefWidth="114.0" text="Messages" />
+                           </children>
+                           <opaqueInsets>
+                              <Insets top="10.0" />
+                           </opaqueInsets>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <Pane fx:id="RIGHT_PANE" onMouseDragged="#rightPaneDragged" onMousePressed="#rightPanePressed" onMouseReleased="#rightPaneReleased" prefHeight="598.0" prefWidth="711.0" style="-fx-background-color: WHITE;" />
    </items>
 </SplitPane>

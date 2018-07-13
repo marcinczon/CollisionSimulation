@@ -6,8 +6,11 @@ import static Parameters.GeneralParameters.generalParameters;
 import static Parameters.ScreenParameter.screenParameter;
 import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
 
+import java.awt.Event;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javax.xml.stream.events.StartDocument;
 
 import com.sun.prism.paint.Color;
 
@@ -16,6 +19,7 @@ import GameObjects.BallController;
 import GameObjects.BallParameter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +28,10 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -31,9 +39,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import main.*;
 
 public class ControllerFXML_Base implements Initializable
 {
+	// Class instances
+
+	StartInterface startInstance;
 	public static ControllerFXML_Base controllerFXML_Base;
 
 	private BallController ballController = new BallController();
@@ -48,7 +60,16 @@ public class ControllerFXML_Base implements Initializable
 	Line line = new Line();
 	// --------------------
 
-	// FXML ITEMS
+	MenuBar menuBar = new MenuBar();
+	Menu fileMenu = new Menu("File");
+	MenuItem exitMenuItem = new MenuItem("Exit");
+
+	Menu windowMenu = new Menu("Window");
+	MenuItem collisionMenuItem = new MenuItem("Collision");
+	MenuItem threedMenuItem = new MenuItem("Threeds");
+	MenuItem messageMenuItem = new MenuItem("Status");
+
+	// @FXML DECLARATIONS
 
 	@FXML
 	private Pane LEFT_PANE;
@@ -58,6 +79,12 @@ public class ControllerFXML_Base implements Initializable
 
 	@FXML
 	private Button buttonThreads;
+
+	@FXML
+	private Button buttonWindows;
+
+	@FXML
+	private Button buttonCollision;
 
 	@FXML
 	private Button ButtonAddBall;
@@ -90,16 +117,169 @@ public class ControllerFXML_Base implements Initializable
 	ChoiceBox choiceBoxMode;
 
 	@FXML
+	SplitPane SplitPane;
+
+	@FXML
 	private TableView<BallParameter> NodeTable;
+
+	// @FXML ACTIONS
 
 	@FXML
 	public void buttonThreadClicked()
 	{
-		controllerFXML_ThreadTable.threadList();
+		startInstance.ShowStage2();
 	}
 
-	int counterTable = 0;
+	@FXML
+	public void buttonCollisionsClicked()
+	{
+		startInstance.ShowStage3();
+	}
 
+	@FXML
+	public void buttonMessagesClicked()
+	{
+		startInstance.ShowStage4();
+	}
+
+	@FXML
+	public void upClicked()
+	{
+		if (ballController.getNodeFromBallList().size() > 0)
+		{
+			if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
+			{
+				BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityY(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityY() - increaseManualVelocity);
+			}
+			if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
+			{
+				BALL_OBS_LIST_REFERENCE.get(ballSelected).manualUp();
+			}
+		}
+	}
+
+	@FXML
+	public void downClicked()
+	{
+		if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
+		{
+			BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityY(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityY() + increaseManualVelocity);
+		}
+		if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
+		{
+			BALL_OBS_LIST_REFERENCE.get(ballSelected).manualDown();
+		}
+	}
+
+	@FXML
+	public void leftClicked()
+	{
+		if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
+		{
+			BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityX(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityX() - increaseManualVelocity);
+		}
+		if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
+		{
+			BALL_OBS_LIST_REFERENCE.get(ballSelected).manualLeft();
+		}
+	}
+
+	@FXML
+	public void rightClicked()
+	{
+		if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
+		{
+			BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityX(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityX() + increaseManualVelocity);
+		}
+		if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
+		{
+			BALL_OBS_LIST_REFERENCE.get(ballSelected).manualRight();
+		}
+	}
+
+	@FXML
+	public void plusClicked()
+	{
+		ballController.addFewBalls();
+		RIGHT_PANE.getChildren().clear();
+		RIGHT_PANE.getChildren().addAll(ballController.getNodeFromBallList());
+
+		// Every time when added new balls, have to be updated interlock list-collisions
+		// bit class
+		updateTable();
+		ControllerFXML_ThreadTable.threadList();
+		controllerFXML_CollisionTable.generateColisionBitTable();
+	}
+
+	@FXML
+	public void zeroClicked()
+	{
+		BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityX(0);
+		BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityY(0);
+	}
+
+	@FXML
+	public void rightPaneDragged(MouseEvent event)
+	{
+		line.setEndX(event.getX());
+		line.setEndY(event.getY());
+	}
+
+	@FXML
+	public void rightPanePressed(MouseEvent event)
+	{
+		RIGHT_PANE.getChildren().add(line);
+		line.setVisible(true);
+		line.setStartX(event.getX());
+		line.setStartY(event.getY());
+	}
+
+	@FXML
+	public void rightPaneReleased(MouseEvent event)
+	{
+		ballController.createBall((int) line.getStartX(), (int) line.getStartY(), (int) (line.getStartX() - line.getEndX()), (int) (line.getStartY() - line.getEndY()));
+		RIGHT_PANE.getChildren().clear();
+		RIGHT_PANE.getChildren().addAll(ballController.getNodeFromBallList());
+
+		updateTable();
+		ControllerFXML_ThreadTable.threadList();
+		controllerFXML_CollisionTable.generateColisionBitTable();
+	}
+	
+	//*********************
+	// Initialize Functions
+	//*********************
+
+	private void initialzeInstances()
+	{
+		controllerFXML_Base = this;
+
+		try
+		{
+			startInstance = (StartInterface) Class.forName("Start").newInstance();
+		} catch (InstantiationException e)
+		{
+
+			e.printStackTrace();
+		} catch (IllegalAccessException e)
+		{
+
+			e.printStackTrace();
+		} catch (ClassNotFoundException e)
+		{
+
+			e.printStackTrace();
+		}
+
+		BALL_OBS_LIST_REFERENCE = ballController.getBallList();
+		for (Ball ball : BALL_OBS_LIST_REFERENCE)
+		{
+			BALL_PARAMETER_OBS_LIST.add(ball.getParameter());
+		}
+	}
+
+	// Table
+	
 	private TableColumn<BallParameter, Integer> numberColumn = new TableColumn<BallParameter, Integer>("Number");
 	private TableColumn<BallParameter, Integer> PosXColumn = new TableColumn<BallParameter, Integer>("PosX");
 	private TableColumn<BallParameter, Integer> PosYColumn = new TableColumn<BallParameter, Integer>("PosY");
@@ -107,18 +287,8 @@ public class ControllerFXML_Base implements Initializable
 	private TableColumn<BallParameter, Integer> VyColumn = new TableColumn<BallParameter, Integer>("Vy");
 	private TableColumn<BallParameter, Integer> WeightColumn = new TableColumn<BallParameter, Integer>("Weight");
 
-	public void initialize(URL url, ResourceBundle resourceBundle)
+	private void initializeTable()
 	{
-		controllerFXML_Base = this;
-
-		BALL_OBS_LIST_REFERENCE = ballController.getBallList();
-		for (Ball ball : BALL_OBS_LIST_REFERENCE)
-		{
-			BALL_PARAMETER_OBS_LIST.add(ball.getParameter());
-		}
-
-		// Creating Table
-
 		NodeTable.setStyle("-fx-font-size:12px;");
 		numberColumn.setCellValueFactory(new PropertyValueFactory<BallParameter, Integer>("P_BaseNumber"));
 		numberColumn.setPrefWidth(50);
@@ -134,103 +304,18 @@ public class ControllerFXML_Base implements Initializable
 		WeightColumn.setPrefWidth(50);
 		NodeTable.getColumns().addAll(numberColumn, PosXColumn, PosYColumn, VxColumn, VyColumn, WeightColumn);
 		NodeTable.setItems(BALL_PARAMETER_OBS_LIST);
+	}
+
+	public void initialize(URL url, ResourceBundle resourceBundle)
+	{
+
+		initialzeInstances();
+		initializeTable();
 
 		// Choice Box Parameters
 
 		choiceBoxMode.setItems(FXCollections.observableArrayList("Position", "Velocity"));
 		choiceBoxMode.getSelectionModel().selectFirst();
-
-		// Buttons
-
-		ButtonAddBall.setOnMouseClicked(new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
-				ballController.addFewBalls();
-				RIGHT_PANE.getChildren().clear();
-				RIGHT_PANE.getChildren().addAll(ballController.getNodeFromBallList());
-
-				// Every time when added new balls, have to be updated interlock list-collisions
-				// bit class
-				updateTable();
-				ControllerFXML_ThreadTable.threadList();
-				controllerFXML_CollisionTable.generateColisionBitTable();
-
-			}
-
-		});
-
-		Up.setOnMouseClicked(new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
-				if (ballController.getNodeFromBallList().size() > 0)
-				{
-					if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
-					{
-						BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityY(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityY() - increaseManualVelocity);
-					}
-					if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
-					{
-						BALL_OBS_LIST_REFERENCE.get(ballSelected).manualUp();
-					}
-				}
-			}
-		});
-
-		Down.setOnMouseClicked(new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
-				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
-				{
-					BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityY(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityY() + increaseManualVelocity);
-				}
-				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
-				{
-					BALL_OBS_LIST_REFERENCE.get(ballSelected).manualDown();
-				}
-			}
-		});
-
-		Left.setOnMouseClicked(new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
-				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
-				{
-					BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityX(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityX() - increaseManualVelocity);
-				}
-				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
-				{
-					BALL_OBS_LIST_REFERENCE.get(ballSelected).manualLeft();
-				}
-			}
-		});
-
-		Right.setOnMouseClicked(new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
-				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Velocity"))
-				{
-					BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityX(BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().getVelocityX() + increaseManualVelocity);
-				}
-				if (choiceBoxMode.getSelectionModel().getSelectedItem().equals("Position"))
-				{
-					BALL_OBS_LIST_REFERENCE.get(ballSelected).manualRight();
-				}
-			}
-		});
-
-		buttonZero.setOnMouseClicked(new EventHandler<MouseEvent>()
-		{
-			public void handle(MouseEvent event)
-			{
-				BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityX(0);
-				BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityY(0);
-			}
-		});
 
 		// Listeners
 
@@ -244,10 +329,6 @@ public class ControllerFXML_Base implements Initializable
 			System.out.println(newSelection.toString());
 		});
 
-		RIGHT_PANE.setOnMousePressed(paneOnMousePressedEventHandler);
-		RIGHT_PANE.setOnMouseDragged(paneOnMouseDraggedEventHandler);
-		RIGHT_PANE.setOnMouseReleased(paneOnMouseRealisedEvenetHandler);
-
 		// Set Screnn Size for Game
 
 		screenParameter.setScreenMaxX((int) RIGHT_PANE.getPrefWidth());
@@ -255,41 +336,14 @@ public class ControllerFXML_Base implements Initializable
 
 	}
 
-	EventHandler<MouseEvent> paneOnMousePressedEventHandler = new EventHandler<MouseEvent>()
+	private void updateTable()
 	{
-		@Override
-		public void handle(MouseEvent t)
+		BALL_PARAMETER_OBS_LIST.clear();
+		for (Ball ball : BALL_OBS_LIST_REFERENCE)
 		{
-			RIGHT_PANE.getChildren().add(line); 
-			line.setVisible(true);
-			line.setStartX(t.getX());
-			line.setStartY(t.getY());
+			BALL_PARAMETER_OBS_LIST.add(ball.getParameter());
 		}
-	};
-
-	EventHandler<MouseEvent> paneOnMouseDraggedEventHandler = new EventHandler<MouseEvent>()
-	{
-		@Override
-		public void handle(MouseEvent t)
-		{		
-			line.setEndX(t.getX());
-			line.setEndY(t.getY());
-		}
-	};
-	EventHandler<MouseEvent> paneOnMouseRealisedEvenetHandler = new EventHandler<MouseEvent>()
-	{
-		@Override
-		public void handle(MouseEvent event)
-		{
-			ballController.createBall((int) line.getStartX(), (int) line.getStartY(), (int) (line.getStartX() - line.getEndX()), (int) (line.getStartY() - line.getEndY()));
-			RIGHT_PANE.getChildren().clear();
-			RIGHT_PANE.getChildren().addAll(ballController.getNodeFromBallList());
-
-			updateTable();
-			ControllerFXML_ThreadTable.threadList();
-			controllerFXML_CollisionTable.generateColisionBitTable();
-		}
-	};
+	}
 
 	public int getScreenSizeX()
 	{
@@ -307,16 +361,7 @@ public class ControllerFXML_Base implements Initializable
 		RIGHT_PANE.getChildren().add(shape);
 	}
 
-	private void updateTable()
-	{
-		BALL_PARAMETER_OBS_LIST.clear();
-		for (Ball ball : BALL_OBS_LIST_REFERENCE)
-		{
-			BALL_PARAMETER_OBS_LIST.add(ball.getParameter());
-		}
-	}
-
-	public Pane getRIGHT_PANE()
+	public Pane getRightPane()
 	{
 		return RIGHT_PANE;
 	}
