@@ -149,12 +149,11 @@ public class Ball
 							collisionBits.setOccupied(balls.getParameter().getBaseNumber());
 							balls.collisionBits.setOccupied(parameter.getBaseNumber());
 							balls.setRed();
-							//resetPosition();
 						}
 						if (intersectsEmpty && collisionBits.isOccupied(balls.getParameter().getBaseNumber()))
 						{
 
-							controllerFXML_MessageTable.appendMessage(parameter.getBaseNumber() + " Reset Ball");
+							//controllerFXML_MessageTable.appendMessage(parameter.getBaseNumber() + " Reset Ball");
 							collisionBits.resetOccupied(balls.getParameter().getBaseNumber());
 
 						}

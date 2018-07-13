@@ -109,8 +109,6 @@ public class ControllerFXML_Base implements Initializable
 
 	public void initialize(URL url, ResourceBundle resourceBundle)
 	{
-		RIGHT_PANE.getChildren().add(line);
-
 		controllerFXML_Base = this;
 
 		BALL_OBS_LIST_REFERENCE = ballController.getBallList();
@@ -262,6 +260,7 @@ public class ControllerFXML_Base implements Initializable
 		@Override
 		public void handle(MouseEvent t)
 		{
+			RIGHT_PANE.getChildren().add(line); 
 			line.setVisible(true);
 			line.setStartX(t.getX());
 			line.setStartY(t.getY());
@@ -270,21 +269,18 @@ public class ControllerFXML_Base implements Initializable
 
 	EventHandler<MouseEvent> paneOnMouseDraggedEventHandler = new EventHandler<MouseEvent>()
 	{
-
 		@Override
 		public void handle(MouseEvent t)
-		{
+		{		
 			line.setEndX(t.getX());
 			line.setEndY(t.getY());
 		}
 	};
 	EventHandler<MouseEvent> paneOnMouseRealisedEvenetHandler = new EventHandler<MouseEvent>()
 	{
-
 		@Override
 		public void handle(MouseEvent event)
 		{
-
 			ballController.createBall((int) line.getStartX(), (int) line.getStartY(), (int) (line.getStartX() - line.getEndX()), (int) (line.getStartY() - line.getEndY()));
 			RIGHT_PANE.getChildren().clear();
 			RIGHT_PANE.getChildren().addAll(ballController.getNodeFromBallList());
@@ -292,7 +288,6 @@ public class ControllerFXML_Base implements Initializable
 			updateTable();
 			ControllerFXML_ThreadTable.threadList();
 			controllerFXML_CollisionTable.generateColisionBitTable();
-
 		}
 	};
 

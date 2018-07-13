@@ -17,7 +17,7 @@ public class BallController
 
 	public BallController()
 	{
-		controllerFXML_MessageTable.appendMessage("Creating ball controller");
+		//controllerFXML_MessageTable.appendMessage("Creating ball controller");
 	}
 
 	public void addFewBalls()

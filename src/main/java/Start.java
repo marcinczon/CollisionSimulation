@@ -5,8 +5,10 @@ import Parameters.GeneralParameters;
 import Parameters.ScreenParameter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Start extends Application
@@ -81,6 +83,11 @@ public class Start extends Application
 			stage4.setResizable(false);
 			stage4.setTitle("Messages");
 			stage4.show();
+			
+			 Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+			 primaryStage.setX(0);
+			 primaryStage.setY(0);
+
 
 		} catch (Exception e)
 		{
