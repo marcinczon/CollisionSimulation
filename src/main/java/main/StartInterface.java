@@ -7,7 +7,5 @@ public interface StartInterface
 	void ShowStage3();
 
 	void ShowStage4();
-	
-	void test();
 
 }

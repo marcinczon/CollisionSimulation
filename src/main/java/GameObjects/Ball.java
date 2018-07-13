@@ -63,6 +63,7 @@ public class Ball
 		labelNumber.setText(String.format("%d", parameter.getBaseNumber()));
 		parameter.setWeight(random.nextInt(20) + 20);
 		circle.setRadius(parameter.getWeight());
+		setTransparent();
 	}
 
 	public void initializePhisicsThreed()
@@ -148,7 +149,7 @@ public class Ball
 							collisionsCalculations.CollisionTwoBall(balls, BALL_OBS_LIST_REFERENCE.get(getParameter().getBaseNumber()));
 							collisionBits.setOccupied(balls.getParameter().getBaseNumber());
 							balls.collisionBits.setOccupied(parameter.getBaseNumber());
-							balls.setRed();
+							//balls.setRed();
 						}
 						if (intersectsEmpty && collisionBits.isOccupied(balls.getParameter().getBaseNumber()))
 						{
@@ -278,6 +279,11 @@ public class Ball
 	public void setBlue()
 	{
 		circle.setFill(Color.BLUE);
+	}
+	public void setTransparent()
+	{
+		circle.setStroke(Color.BLACK);
+		circle.setFill(Color.TRANSPARENT);
 	}
 
 	public CollisionBits getCollisionBits()

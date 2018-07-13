@@ -139,7 +139,7 @@ public class CollisionBits implements GeneralString
 						tStart = System.currentTimeMillis();
 						node.setStyle(styleButton2);
 						collisionsCalculations.CalculateAngelAndPointOfCollision(referenceToBaseBall, referenceToCollisionBall, collisionPoint);
-						collisionPoint.setFill(Color.GREEN);
+						collisionPoint.setFill(Color.RED);
 					}
 					if (newValue == false && oldValue == true)
 					{

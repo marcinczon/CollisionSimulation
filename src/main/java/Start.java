@@ -4,12 +4,14 @@ import FX_Controllers.ControllerFXML_CollisionTable;
 import Parameters.GeneralParameters;
 import Parameters.ScreenParameter;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import main.StartInterface;
 
 public class Start extends Application implements StartInterface
@@ -34,11 +36,6 @@ public class Start extends Application implements StartInterface
 	public Start()
 	{
 		start = this;
-	}
-
-	public void test()
-	{
-		System.out.println("asdasd");
 	}
 
 	public void ShowStage2()
@@ -74,22 +71,24 @@ public class Start extends Application implements StartInterface
 			primaryStage.setScene(scene1);
 			primaryStage.setResizable(false);
 			primaryStage.setTitle("Simulation");
+			primaryStage.setOnCloseRequest((WindowEvent event) ->
+			{
+				Platform.exit();
+				System.exit(0);
+			});
 			primaryStage.show();
 
 			stage2.setScene(scene2);
 			stage2.setResizable(true);
 			stage2.setTitle("Threed");
-			stage2.show();
-
+			
 			stage3.setScene(scene3);
 			stage3.setResizable(true);
 			stage3.setTitle("Collision");
-			stage3.show();
 
 			stage4.setScene(scene4);
 			stage4.setResizable(false);
 			stage4.setTitle("Messages");
-			stage4.show();
 
 			Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
 			primaryStage.setX(0);
