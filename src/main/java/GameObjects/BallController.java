@@ -15,11 +15,6 @@ public class BallController
 {
 	static ObservableList<Ball> BALL_OBS_LIST = FXCollections.observableArrayList();
 
-	public BallController()
-	{
-		//controllerFXML_MessageTable.appendMessage("Creating ball controller");
-	}
-
 	public void addFewBalls()
 	{
 		Random rand = new Random();
@@ -34,43 +29,55 @@ public class BallController
 
 				e.printStackTrace();
 			}
-			for (Ball ball : BALL_OBS_LIST)
-			{
-				ball.updateStatusBit();
-			}
+			updateStatusBits();
 		}
 	}
 
-	public void createBall(int posX, int posY, int speedX, int speedY)
+	// Zmienic, podczas klikniecia ma byc widoczna kula a dopiero po puszczriu
+	// przycisku ma siê utworzyæ
+	public Ball createNewBall()
 	{
-		addNewBall(posX, posY, speedX, speedY);
+		return new Ball(BALL_OBS_LIST);
+	}
 
+	public Ball addNewBall()
+	{
+		Ball ball = new Ball(BALL_OBS_LIST);
+		Random random = new Random();
+		
+		ball.setStartSpeed(random.nextInt(200) - 100, random.nextInt(200) - 100);
+		ball.setStartPosition(random.nextInt(200), random.nextInt(200));
+		
+		ball.setReferenceBallList(BALL_OBS_LIST);
+		BALL_OBS_LIST.add(ball);
+		
+		updateStatusBits();
+
+		return ball;
+	}
+
+	public Ball addNewBall(int posX, int posY, int speedX, int speedY, int weight)
+	{
+		Ball ball = new Ball(BALL_OBS_LIST);
+		
+		ball.setStartPosition(posX, posY);
+		ball.setStartSpeed(speedX, speedY);
+		ball.setWeight(weight);
+		
+		ball.setReferenceBallList(BALL_OBS_LIST);
+		BALL_OBS_LIST.add(ball);
+		
+		updateStatusBits();
+
+		return ball;
+	}
+	
+	private void updateStatusBits()
+	{
 		for (Ball ball : BALL_OBS_LIST)
 		{
 			ball.updateStatusBit();
 		}
-
-	}
-
-	public void addNewBall()
-	{
-		Ball ball = new Ball(BALL_OBS_LIST);
-		Random random = new Random();
-		ball.setStartSpeed(random.nextInt(200) - 100, random.nextInt(200) - 100);
-		ball.setStartPosition(random.nextInt(200), random.nextInt(200));
-		ball.setReferenceBallList(BALL_OBS_LIST);
-		BALL_OBS_LIST.add(ball);
-
-	}
-
-	public void addNewBall(int posX, int posY, int speedX, int speedY)
-	{
-		Ball ball = new Ball(BALL_OBS_LIST);
-		Random random = new Random();
-		ball.setStartPosition(posX, posY);
-		ball.setStartSpeed(speedX, speedY);
-		ball.setReferenceBallList(BALL_OBS_LIST);
-		BALL_OBS_LIST.add(ball);
 	}
 
 	public void removeBallFromList(int index)
@@ -97,5 +104,9 @@ public class BallController
 	public static ObservableList<Ball> getBALL_OBS_LIST()
 	{
 		return BALL_OBS_LIST;
+	}
+	public  void  clearBallList()
+	{
+		BALL_OBS_LIST.clear();
 	}
 }

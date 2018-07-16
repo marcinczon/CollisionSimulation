@@ -19,7 +19,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageTable;
 
-
 public class Ball
 {
 
@@ -68,6 +67,7 @@ public class Ball
 
 	public void initializePhisicsThreed()
 	{
+
 		runnablePhysicCalc = new Runnable()
 		{
 			public void run()
@@ -149,14 +149,10 @@ public class Ball
 							collisionsCalculations.CollisionTwoBall(balls, BALL_OBS_LIST_REFERENCE.get(getParameter().getBaseNumber()));
 							collisionBits.setOccupied(balls.getParameter().getBaseNumber());
 							balls.collisionBits.setOccupied(parameter.getBaseNumber());
-							//balls.setRed();
 						}
 						if (intersectsEmpty && collisionBits.isOccupied(balls.getParameter().getBaseNumber()))
 						{
-
-							//controllerFXML_MessageTable.appendMessage(parameter.getBaseNumber() + " Reset Ball");
 							collisionBits.resetOccupied(balls.getParameter().getBaseNumber());
-
 						}
 
 					}
@@ -248,6 +244,12 @@ public class Ball
 		return parameter;
 	}
 
+	public void setWeight(int weight)
+	{
+		parameter.setWeight(weight);
+		circle.setRadius(weight);
+	}
+
 	public void setStartSpeed(int startSpeedX, int startSpeedY)
 	{
 		parameter.setVelocityX(startSpeedX);
@@ -280,6 +282,7 @@ public class Ball
 	{
 		circle.setFill(Color.BLUE);
 	}
+
 	public void setTransparent()
 	{
 		circle.setStroke(Color.BLACK);
@@ -289,6 +292,11 @@ public class Ball
 	public CollisionBits getCollisionBits()
 	{
 		return collisionBits;
+	}
+
+	public void setCircle(Circle circle)
+	{
+		this.circle = circle;
 	}
 
 }

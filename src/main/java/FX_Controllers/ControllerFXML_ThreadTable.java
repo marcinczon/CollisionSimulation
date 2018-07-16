@@ -57,4 +57,5 @@ public class ControllerFXML_ThreadTable implements Initializable
 			THREAD_OBS_LIST.add(new ThreadInfo(t));
 		}
 	}
+	
 }

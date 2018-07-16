@@ -52,6 +52,7 @@
                                              </children>
                                           </VBox>
                                           <Button fx:id="buttonZero" mnemonicParsing="false" onMouseClicked="#zeroClicked" prefHeight="31.0" prefWidth="113.0" text="Zero" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                          <Button fx:id="clearButton" mnemonicParsing="false" onMouseClicked="#onMouseClickedClear" prefHeight="31.0" prefWidth="114.0" text="Clear" GridPane.columnIndex="2" />
                                        </children>
                                        <opaqueInsets>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

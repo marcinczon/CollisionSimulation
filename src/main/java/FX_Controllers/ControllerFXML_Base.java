@@ -8,6 +8,7 @@ import static FX_Controllers.ControllerFXML_MessageTable.controllerFXML_MessageT
 
 import java.awt.Event;
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import javax.xml.stream.events.StartDocument;
@@ -38,6 +39,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import main.*;
 
@@ -218,6 +220,9 @@ public class ControllerFXML_Base implements Initializable
 		BALL_OBS_LIST_REFERENCE.get(ballSelected).getParameter().setVelocityY(0);
 	}
 
+	Circle testCirle = new Circle();
+	Random random = new Random();
+
 	@FXML
 	public void rightPaneDragged(MouseEvent event)
 	{
@@ -228,27 +233,55 @@ public class ControllerFXML_Base implements Initializable
 	@FXML
 	public void rightPanePressed(MouseEvent event)
 	{
-		RIGHT_PANE.getChildren().add(line);
-		line.setVisible(true);
+		event.setDragDetect(true);
+		testCirle.setRadius(random.nextInt(30));
+		testCirle.setCenterX(event.getX());
+		testCirle.setCenterY(event.getY());
+
 		line.setStartX(event.getX());
 		line.setStartY(event.getY());
+
+		RIGHT_PANE.getChildren().add(testCirle);
+		RIGHT_PANE.getChildren().add(line);
+
 	}
 
 	@FXML
 	public void rightPaneReleased(MouseEvent event)
 	{
-		ballController.createBall((int) line.getStartX(), (int) line.getStartY(), (int) (line.getStartX() - line.getEndX()), (int) (line.getStartY() - line.getEndY()));
-		RIGHT_PANE.getChildren().clear();
-		RIGHT_PANE.getChildren().addAll(ballController.getNodeFromBallList());
+		event.setDragDetect(false);
+
+		int weight = ((int) testCirle.getRadius());
+		int x = ((int) line.getStartX());
+		int y = ((int) line.getStartY());
+		int Vx = (int) (line.getStartX() - line.getEndX());
+		int Vy = ((int) (line.getStartY() - line.getEndY()));
+
+		ballController.addNewBall(x, y, Vx, Vy, weight);
 
 		updateTable();
 		ControllerFXML_ThreadTable.threadList();
 		controllerFXML_CollisionTable.generateColisionBitTable();
+
+		RIGHT_PANE.getChildren().remove(testCirle);
+		RIGHT_PANE.getChildren().remove(line);
+
+		refreshScreen();
+
 	}
-	
-	//*********************
+
+	@FXML
+	public void onMouseClickedClear(MouseEvent event)
+	{
+		// ballController.clearBallList();
+		// ControllerFXML_ThreadTable.threadList();
+		// RIGHT_PANE.getChildren().clear();
+		// RIGHT_PANE.getChildren().addAll(ballController.getNodeFromBallList());
+	}
+
+	// *********************
 	// Initialize Functions
-	//*********************
+	// *********************
 
 	private void initialzeInstances()
 	{
@@ -279,7 +312,7 @@ public class ControllerFXML_Base implements Initializable
 	}
 
 	// Table
-	
+
 	private TableColumn<BallParameter, Integer> numberColumn = new TableColumn<BallParameter, Integer>("Number");
 	private TableColumn<BallParameter, Integer> PosXColumn = new TableColumn<BallParameter, Integer>("PosX");
 	private TableColumn<BallParameter, Integer> PosYColumn = new TableColumn<BallParameter, Integer>("PosY");
@@ -345,6 +378,12 @@ public class ControllerFXML_Base implements Initializable
 		}
 	}
 
+	private void refreshScreen()
+	{
+		RIGHT_PANE.getChildren().clear();
+		RIGHT_PANE.getChildren().addAll(ballController.getNodeFromBallList());
+	}
+
 	public int getScreenSizeX()
 	{
 		return (int) RIGHT_PANE.getPrefWidth();
@@ -357,7 +396,6 @@ public class ControllerFXML_Base implements Initializable
 
 	public void addObjectToPane(Node shape)
 	{
-		// shape.
 		RIGHT_PANE.getChildren().add(shape);
 	}
 

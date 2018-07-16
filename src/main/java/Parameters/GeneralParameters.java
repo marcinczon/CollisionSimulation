@@ -12,7 +12,7 @@ public class GeneralParameters
 
 	private double Timing = 0.05;
 	private double Gravity = 9.8;
-	private int newBalls = 4;
+	private int newBalls = 1;
 
 	public double getTiming()
 	{
